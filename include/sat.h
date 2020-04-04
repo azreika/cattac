@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #define MAX_ID_LEN 256
 #define INIT_CAP 32
@@ -82,5 +83,23 @@ void sat_add_disjunction(sat_conj_t* conjunction, sat_disj_t* disjunction);
  * @param atom atom to add
  */
 void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom);
+
+/**
+ * Print a conjunction to stdout.
+ * @param conjunction conjunction to print
+ */
+void print_sat_conj(sat_conj_t* conjunction);
+
+/**
+ * Print a disjunction to stdout.
+ * @param disjunction disjunction to print
+ */
+void print_sat_disj(sat_disj_t* disjunction);
+
+/**
+ * Print an atom to stdout.
+ * @param atom atom to print
+ */
+void print_sat_atom(sat_atom_t* atom);
 
 #endif // CATTAC_SAT_H

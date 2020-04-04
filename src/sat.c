@@ -73,3 +73,32 @@ void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom) {
     disjunction->size += 1;
     return;
 }
+
+void print_sat_conj(sat_conj_t* conjunction) {
+    printf("( ");
+    for (size_t i = 0; i < conjunction->size; i++) {
+        if (i != 0) {
+            printf(" & ");
+        }
+        print_sat_disj(conjunction->disjunctions[i]);
+    }
+    printf(" )");
+}
+
+void print_sat_disj(sat_disj_t* disjunction) {
+    printf("( ");
+    for (size_t i = 0; i < disjunction->size; i++) {
+        if (i != 0) {
+            printf(" | ");
+        }
+        print_sat_atom(disjunction->atoms[i]);
+    }
+    printf(" )");
+}
+
+void print_sat_atom(sat_atom_t* atom) {
+    if (atom->negated) {
+        printf("!");
+    }
+    printf("%s", atom->id);
+}
