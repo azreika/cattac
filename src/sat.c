@@ -1,3 +1,6 @@
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 #include "sat.h"
 
 sat_conj_t* create_sat_conj(void) {
@@ -53,9 +56,9 @@ void sat_add_disjunction(sat_conj_t* conjunction, sat_disj_t* disjunction) {
     assert(conjunction->size <= conjunction->cap && "invalid size");
     if (conjunction->size == conjunction->cap) {
         conjunction->cap *= 2;
-        conjunction->disjunctions = realloc(sizeof(sat_disj_t) * conjunction->cap);
+        conjunction->disjunctions = realloc(conjunction->disjunctions, sizeof(sat_disj_t) * conjunction->cap);
     }
-    conjunction->disjunctions[size] = disjunction;
+    conjunction->disjunctions[conjunction->size] = disjunction;
     conjunction->size += 1;
     return;
 }
@@ -64,9 +67,9 @@ void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom) {
     assert(disjunction->size <= disjunction->cap && "invalid size");
     if (disjunction->size == disjunction->cap) {
         disjunction->cap *= 2;
-        disjunction->atoms = realloc(sizeof(sat_atom_t) * disjunction->cap);
+        disjunction->atoms = realloc(disjunction->atoms, sizeof(sat_atom_t) * disjunction->cap);
     }
-    disjunction->atoms[size] = atom;
+    disjunction->atoms[disjunction->size] = atom;
     disjunction->size += 1;
     return;
 }

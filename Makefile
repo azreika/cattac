@@ -25,3 +25,4 @@ $(OBJ_DIR):
 
 clean:
 	$(RM) -r $(OBJ_DIR)
+	$(RM) $(TARGET)

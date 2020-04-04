@@ -2,29 +2,34 @@
 #define CATTAC_SAT_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAX_ID_LEN 256
 #define INIT_CAP 32
 
+typedef struct sat_conj_t sat_conj_t;
+typedef struct sat_disj_t sat_disj_t;
+typedef struct sat_atom_t sat_atom_t;
+
 // SAT Conjunctions
-typedef struct sat_conj_t {
+struct sat_conj_t {
     sat_disj_t** disjunctions;
     uint64_t size;
     uint64_t cap;
-} sat_conj_t;
+};
 
 // SAT Disjunctions
-typedef struct sat_disj_t {
-    sat_atom_t* atoms;
+struct sat_disj_t {
+    sat_atom_t** atoms;
     uint64_t size;
     uint64_t cap;
-} sat_disj_t;
+};
 
 // SAT Atoms
-typedef struct sat_atom_t {
+struct sat_atom_t {
     char id[MAX_ID_LEN];
     bool negated;
-} sat_atom_t;
+};
 
 /**
  * Create a new SAT conjunction.
