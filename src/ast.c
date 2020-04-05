@@ -54,7 +54,7 @@ void destroy_ast_node(void* node) {
 }
 
 void destroy_ast_and(ast_and_t* and_op) {
-    linked_list* operands = and_op->operands;
+    list* operands = and_op->operands;
     for (uint64_t i = 0; i < operands->size; i++) {
         destroy_ast_node(operands->elements[i]);
     }
@@ -62,7 +62,7 @@ void destroy_ast_and(ast_and_t* and_op) {
 }
 
 void destroy_ast_or(ast_or_t* or_op) {
-    linked_list* operands = or_op->operands;
+    list* operands = or_op->operands;
     for (uint64_t i = 0; i < operands->size; i++) {
         destroy_ast_node(operands->elements[i]);
     }
@@ -88,7 +88,7 @@ void ast_or_append(ast_or_t* or_op, void* operand) {
 
 void print_ast_and(ast_and_t* and_op) {
     printf("(");
-    linked_list* operands = and_op->operands;
+    list* operands = and_op->operands;
     for (uint64_t i = 0; i < operands->size; i++) {
         if (i != 0) {
             printf(" & ");
@@ -100,7 +100,7 @@ void print_ast_and(ast_and_t* and_op) {
 
 void print_ast_or(ast_or_t* or_op) {
     printf("(");
-    linked_list* operands = or_op->operands;
+    list* operands = or_op->operands;
     for (uint64_t i = 0; i < operands->size; i++) {
         if (i != 0) {
             printf(" | ");

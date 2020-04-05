@@ -27,7 +27,7 @@ sat_atom_t* create_sat_atom(char* id, bool negated) {
 }
 
 void destroy_sat_conj(sat_conj_t* conjunction) {
-    linked_list* disjunctions = conjunction->disjunctions;
+    list* disjunctions = conjunction->disjunctions;
     for (uint64_t i = 0; i < disjunctions->size; i++) {
         destroy_sat_disj(disjunctions->elements[i]);
     }
@@ -37,7 +37,7 @@ void destroy_sat_conj(sat_conj_t* conjunction) {
 }
 
 void destroy_sat_disj(sat_disj_t* disjunction) {
-    linked_list* atoms = disjunction->atoms;
+    list* atoms = disjunction->atoms;
     for (uint64_t i = 0; i < atoms->size; i++) {
         destroy_sat_atom(atoms->elements[i]);
     }
@@ -59,7 +59,7 @@ void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom) {
 }
 
 void print_sat_conj(sat_conj_t* conjunction) {
-    linked_list* disjunctions = conjunction->disjunctions;
+    list* disjunctions = conjunction->disjunctions;
     printf("( ");
     for (size_t i = 0; i < disjunctions->size; i++) {
         if (i != 0) {
@@ -71,7 +71,7 @@ void print_sat_conj(sat_conj_t* conjunction) {
 }
 
 void print_sat_disj(sat_disj_t* disjunction) {
-    linked_list* atoms = disjunction->atoms;
+    list* atoms = disjunction->atoms;
     printf("( ");
     for (size_t i = 0; i < atoms->size; i++) {
         if (i != 0) {
