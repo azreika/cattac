@@ -5,21 +5,13 @@
 
 sat_conj_t* create_sat_conj(void) {
     sat_conj_t* ret = malloc(sizeof(sat_conj_t));
-
-    ret->disjunctions = malloc(sizeof(sat_disj_t) * INIT_CAP);
-    ret->size = 0;
-    ret->cap = INIT_CAP;
-
+    ret->disjunctions = create_list();
     return ret;
 }
 
 sat_disj_t* create_sat_disj(void) {
     sat_disj_t* ret = malloc(sizeof(sat_disj_t));
-
-    ret->atoms = malloc(sizeof(sat_atom_t) * INIT_CAP);
-    ret->size = 0;
-    ret->cap = INIT_CAP;
-
+    ret->atoms = create_list();
     return ret;
 }
 
@@ -35,16 +27,20 @@ sat_atom_t* create_sat_atom(char* id, bool negated) {
 }
 
 void destroy_sat_conj(sat_conj_t* conjunction) {
-    for (uint64_t i = 0; i < conjunction->size; i++) {
-        destroy_sat_disj(conjunction->disjunctions[i]);
+    linked_list* disjunctions = conjunction->disjunctions;
+    for (uint64_t i = 0; i < disjunctions->size; i++) {
+        destroy_sat_disj(disjunctions->elements[i]);
     }
+    free(disjunctions);
     free(conjunction);
 }
 
 void destroy_sat_disj(sat_disj_t* disjunction) {
-    for (uint64_t i = 0; i < disjunction->size; i++) {
-        destroy_sat_atom(disjunction->atoms[i]);
+    linked_list* atoms = disjunction->atoms;
+    for (uint64_t i = 0; i < atoms->size; i++) {
+        destroy_sat_atom(atoms->elements[i]);
     }
+    free(atoms);
     free(disjunction);
 }
 
@@ -53,45 +49,33 @@ void destroy_sat_atom(sat_atom_t* atom) {
 }
 
 void sat_add_disjunction(sat_conj_t* conjunction, sat_disj_t* disjunction) {
-    assert(conjunction->size <= conjunction->cap && "invalid size");
-    if (conjunction->size == conjunction->cap) {
-        conjunction->cap *= 2;
-        conjunction->disjunctions = realloc(conjunction->disjunctions, sizeof(sat_disj_t) * conjunction->cap);
-    }
-    conjunction->disjunctions[conjunction->size] = disjunction;
-    conjunction->size += 1;
-    return;
+    list_append(conjunction->disjunctions, disjunction);
 }
 
 void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom) {
-    assert(disjunction->size <= disjunction->cap && "invalid size");
-    if (disjunction->size == disjunction->cap) {
-        disjunction->cap *= 2;
-        disjunction->atoms = realloc(disjunction->atoms, sizeof(sat_atom_t) * disjunction->cap);
-    }
-    disjunction->atoms[disjunction->size] = atom;
-    disjunction->size += 1;
-    return;
+    list_append(disjunction->atoms, atom);
 }
 
 void print_sat_conj(sat_conj_t* conjunction) {
+    linked_list* disjunctions = conjunction->disjunctions;
     printf("( ");
-    for (size_t i = 0; i < conjunction->size; i++) {
+    for (size_t i = 0; i < disjunctions->size; i++) {
         if (i != 0) {
             printf(" & ");
         }
-        print_sat_disj(conjunction->disjunctions[i]);
+        print_sat_disj(disjunctions->elements[i]);
     }
     printf(" )");
 }
 
 void print_sat_disj(sat_disj_t* disjunction) {
+    linked_list* atoms = disjunction->atoms;
     printf("( ");
-    for (size_t i = 0; i < disjunction->size; i++) {
+    for (size_t i = 0; i < atoms->size; i++) {
         if (i != 0) {
             printf(" | ");
         }
-        print_sat_atom(disjunction->atoms[i]);
+        print_sat_atom(atoms->elements[i]);
     }
     printf(" )");
 }

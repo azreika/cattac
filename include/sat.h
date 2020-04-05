@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "linked_list.h"
 
 #define MAX_ID_LEN 256
 #define INIT_CAP 32
@@ -14,16 +15,12 @@ typedef struct sat_atom_t sat_atom_t;
 
 // SAT Conjunctions
 struct sat_conj_t {
-    sat_disj_t** disjunctions;
-    uint64_t size;
-    uint64_t cap;
+    linked_list* disjunctions;
 };
 
 // SAT Disjunctions
 struct sat_disj_t {
-    sat_atom_t** atoms;
-    uint64_t size;
-    uint64_t cap;
+    linked_list* atoms;
 };
 
 // SAT Atoms
