@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "ast.h"
+#include "lexer.h"
 #include "sat.h"
 
 int main(int argc, char** argv) {
@@ -54,5 +55,13 @@ int main(int argc, char** argv) {
 
     destroy_ast_node(level0);
 
+    printf("\n");
+    printf("Lexer test [ (al & !(bk | caa)) | d ]:\n");
+    list* tokens = scan("(al & !(bk | caa)) | d\n");
+    for (size_t i = 0; i < tokens->size; i++) {
+        if (i != 0) printf(" ");
+        print_token(tokens->elements[i]);
+    }
+    printf("\n");
     return 0;
 }
