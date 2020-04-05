@@ -1,6 +1,7 @@
 #ifndef CATTAC_AST_H
 #define CATTAC_AST_H
 
+#include <stdio.h>
 #include "linked_list.h"
 
 #define MAX_ID_LEN 256
@@ -115,5 +116,34 @@ void ast_and_append(ast_and_t* and_op, void* operand);
  */
 void ast_or_append(ast_or_t* or_op, void* operand);
 
-#endif // CATTAC_AST_H
+/**
+ * Print generic AST node.
+ * @param node node to print
+ */
+void print_ast_node(void* node);
 
+/**
+ * Print an AST "and".
+ * @param and_op and operation to print
+ */
+void print_ast_and(ast_and_t* and_op);
+
+/**
+ * Print an AST "or".
+ * @param or_op and operation to print
+ */
+void print_ast_or(ast_or_t* or_op);
+
+/**
+ * Print an AST "not".
+ * @param not_op not operation to print
+ */
+void print_ast_not(ast_not_t* not_op);
+
+/**
+ * Print an AST variable.
+ * @param var_op variable to print
+ */
+void print_ast_var(ast_var_t* var_op);
+
+#endif // CATTAC_AST_H

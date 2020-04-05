@@ -6,24 +6,28 @@
 
 ast_and_t* create_ast_and() {
     ast_and_t* and_op = malloc(sizeof(ast_and_t));
+    and_op->header.type = ASTTYPE_AND;
     and_op->operands = create_list();
     return and_op;
 }
 
 ast_or_t* create_ast_or() {
     ast_or_t* or_op = malloc(sizeof(ast_or_t));
+    or_op->header.type = ASTTYPE_OR;
     or_op->operands = create_list();
     return or_op;
 }
 
 ast_not_t* create_ast_not(void* operand) {
     ast_not_t* not_op = malloc(sizeof(ast_not_t));
+    not_op->header.type = ASTTYPE_NOT;
     not_op->operand = operand;
     return not_op;
 }
 
 ast_var_t* create_ast_var(char* id) {
     ast_var_t* var = malloc(sizeof(ast_var_t));
+    var->header.type = ASTTYPE_VAR;
     strncpy(var->id, id, MAX_ID_LEN);
     var->id[MAX_ID_LEN-1] = '\0';
     return var;
@@ -80,4 +84,58 @@ void ast_and_append(ast_and_t* and_op, void* operand) {
 
 void ast_or_append(ast_or_t* or_op, void* operand) {
     list_append(or_op->operands, operand);
+}
+
+void print_ast_and(ast_and_t* and_op) {
+    printf("(");
+    linked_list* operands = and_op->operands;
+    for (uint64_t i = 0; i < operands->size; i++) {
+        if (i != 0) {
+            printf(" & ");
+        }
+        print_ast_node(operands->elements[i]);
+    }
+    printf(")");
+}
+
+void print_ast_or(ast_or_t* or_op) {
+    printf("(");
+    linked_list* operands = or_op->operands;
+    for (uint64_t i = 0; i < operands->size; i++) {
+        if (i != 0) {
+            printf(" | ");
+        }
+        print_ast_node(operands->elements[i]);
+    }
+    printf(")");
+}
+
+void print_ast_not(ast_not_t* not_op) {
+    printf("!(");
+    print_ast_node(not_op->operand);
+    printf(")");
+}
+
+void print_ast_var(ast_var_t* var_op) {
+    printf("%s", var_op->id);
+}
+
+void print_ast_node(void* node) {
+    ast_type_id type = ((struct ast_header_t*) node)->type;
+    switch (type) {
+        case ASTTYPE_AND:
+            print_ast_and(node);
+            break;
+        case ASTTYPE_OR:
+            print_ast_or(node);
+            break;
+        case ASTTYPE_NOT:
+            print_ast_not(node);
+            break;
+        case ASTTYPE_VAR:
+            print_ast_var(node);
+            break;
+        default:
+            assert(false && "unexpected ast type");
+    }
 }

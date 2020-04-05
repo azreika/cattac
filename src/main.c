@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include "ast.h"
 #include "sat.h"
 
 int main(int argc, char** argv) {
     printf("Welcome to CattaC.\n");
 
+    printf("SAT test:\n");
     sat_disj_t* porq = create_sat_disj();
     sat_atom_t* p1 = create_sat_atom("p", false);
     sat_atom_t* q1 = create_sat_atom("q", false);
@@ -20,6 +22,37 @@ int main(int argc, char** argv) {
 
     print_sat_conj(result);
     printf("\n");
+    destroy_sat_conj(result);
+
+    printf("\n");
+    printf("AST test [ (a & !(b v c)) v d ]:\n");
+
+    // b v c
+    ast_or_t* level0010 = create_ast_or();
+    ast_var_t* level00100 = create_ast_var("b");
+    ast_var_t* level00101 = create_ast_var("c");
+    ast_or_append(level0010, level00100);
+    ast_or_append(level0010, level00101);
+
+    // !(b v c)
+    ast_not_t* level001 = create_ast_not(level0010);
+
+    // (a & !(b v c))
+    ast_and_t* level00 = create_ast_and();
+    ast_var_t* level000 = create_ast_var("a");
+    ast_and_append(level00, level000);
+    ast_and_append(level00, level001);
+
+    // (a & !(b v c)) v d
+    ast_or_t* level0 = create_ast_or();
+    ast_var_t* level01 = create_ast_var("d");
+    ast_or_append(level0, level00);
+    ast_or_append(level0, level01);
+
+    print_ast_node(level0);
+    printf("\n");
+
+    destroy_ast_node(level0);
 
     return 0;
 }

@@ -31,6 +31,7 @@ void destroy_sat_conj(sat_conj_t* conjunction) {
     for (uint64_t i = 0; i < disjunctions->size; i++) {
         destroy_sat_disj(disjunctions->elements[i]);
     }
+    free(disjunctions->elements);
     free(disjunctions);
     free(conjunction);
 }
@@ -40,6 +41,7 @@ void destroy_sat_disj(sat_disj_t* disjunction) {
     for (uint64_t i = 0; i < atoms->size; i++) {
         destroy_sat_atom(atoms->elements[i]);
     }
+    free(atoms->elements);
     free(atoms);
     free(disjunction);
 }
