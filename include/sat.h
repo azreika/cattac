@@ -7,7 +7,6 @@
 #include "linked_list.h"
 
 #define MAX_ID_LEN 256
-#define INIT_CAP 32
 
 typedef struct sat_conj_t sat_conj_t;
 typedef struct sat_disj_t sat_disj_t;
