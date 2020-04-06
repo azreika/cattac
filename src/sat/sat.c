@@ -3,20 +3,20 @@
 #include <string.h>
 #include "sat.h"
 
-sat_conj_t* create_sat_conj(void) {
-    sat_conj_t* ret = (sat_conj_t*) malloc(sizeof(sat_conj_t));
+SatConjunction* create_sat_conj(void) {
+    SatConjunction* ret = (SatConjunction*) malloc(sizeof(SatConjunction));
     ret->disjunctions = create_list();
     return ret;
 }
 
-sat_disj_t* create_sat_disj(void) {
-    sat_disj_t* ret = (sat_disj_t*) malloc(sizeof(sat_disj_t));
+SatDisjunction* create_sat_disj(void) {
+    SatDisjunction* ret = (SatDisjunction*) malloc(sizeof(SatDisjunction));
     ret->atoms = create_list();
     return ret;
 }
 
-sat_atom_t* create_sat_atom(char* id, bool negated) {
-    sat_atom_t* ret = (sat_atom_t*) malloc(sizeof(sat_atom_t));
+SatAtom* create_sat_atom(char* id, bool negated) {
+    SatAtom* ret = (SatAtom*) malloc(sizeof(SatAtom));
 
     strncpy(ret->id, id, MAX_ID_LEN);
     ret->id[MAX_ID_LEN-1] = '\0';
@@ -26,63 +26,55 @@ sat_atom_t* create_sat_atom(char* id, bool negated) {
     return ret;
 }
 
-void destroy_sat_conj(sat_conj_t* conjunction) {
+void destroy_sat_conj(SatConjunction* conjunction) {
     list* disjunctions = conjunction->disjunctions;
     for (uint64_t i = 0; i < disjunctions->size; i++) {
-        destroy_sat_disj((sat_disj_t*) disjunctions->elements[i]);
+        destroy_sat_disj((SatDisjunction*) disjunctions->elements[i]);
     }
     free(disjunctions->elements);
     free(disjunctions);
     free(conjunction);
 }
 
-void destroy_sat_disj(sat_disj_t* disjunction) {
+void destroy_sat_disj(SatDisjunction* disjunction) {
     list* atoms = disjunction->atoms;
     for (uint64_t i = 0; i < atoms->size; i++) {
-        destroy_sat_atom((sat_atom_t*) atoms->elements[i]);
+        destroy_sat_atom((SatAtom*) atoms->elements[i]);
     }
     free(atoms->elements);
     free(atoms);
     free(disjunction);
 }
 
-void destroy_sat_atom(sat_atom_t* atom) {
+void destroy_sat_atom(SatAtom* atom) {
     free(atom);
 }
 
-void sat_add_disjunction(sat_conj_t* conjunction, sat_disj_t* disjunction) {
-    list_append(conjunction->disjunctions, disjunction);
-}
-
-void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom) {
-    list_append(disjunction->atoms, atom);
-}
-
-void print_sat_conj(sat_conj_t* conjunction) {
+void print_sat_conj(SatConjunction* conjunction) {
     list* disjunctions = conjunction->disjunctions;
     printf("( ");
     for (size_t i = 0; i < disjunctions->size; i++) {
         if (i != 0) {
             printf(" & ");
         }
-        print_sat_disj((sat_disj_t*) disjunctions->elements[i]);
+        print_sat_disj((SatDisjunction*) disjunctions->elements[i]);
     }
     printf(" )");
 }
 
-void print_sat_disj(sat_disj_t* disjunction) {
+void print_sat_disj(SatDisjunction* disjunction) {
     list* atoms = disjunction->atoms;
     printf("( ");
     for (size_t i = 0; i < atoms->size; i++) {
         if (i != 0) {
             printf(" | ");
         }
-        print_sat_atom((sat_atom_t*) atoms->elements[i]);
+        print_sat_atom((SatAtom*) atoms->elements[i]);
     }
     printf(" )");
 }
 
-void print_sat_atom(sat_atom_t* atom) {
+void print_sat_atom(SatAtom* atom) {
     if (atom->negated) {
         printf("!");
     }

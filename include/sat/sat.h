@@ -8,22 +8,50 @@
 
 #define MAX_ID_LEN 256
 
-typedef struct sat_conj_t sat_conj_t;
-typedef struct sat_disj_t sat_disj_t;
-typedef struct sat_atom_t sat_atom_t;
+class SatNode;
+class SatConjunction;
+class SatDisjunction;
+class SatAtom;
 
-// SAT Conjunctions
-struct sat_conj_t {
+class SatNode {};
+
+/**
+ * Represents a conjunction of nested disjunctions.
+ */
+class SatConjunction : public SatNode {
+public:
     list* disjunctions;
+
+    /**
+     * Add a disjunction to the conjunction.
+     * @param disjunction disjunction to add
+     */
+    void addDisjunction(SatDisjunction* disjunction) {
+        list_append(disjunctions, disjunction);
+    }
 };
 
-// SAT Disjunctions
-struct sat_disj_t {
+/**
+ * Represents a disjunction of nested atoms.
+ */
+class SatDisjunction : public SatNode {
+public:
     list* atoms;
+
+    /**
+     * Add an atom to the disjunction.
+     * @param atom atom to add
+     */
+    void addAtom(SatAtom* atom) {
+        list_append(atoms, atom);
+    }
 };
 
-// SAT Atoms
-struct sat_atom_t {
+/**
+ * Represents a possibly negated atom.
+ */
+class SatAtom : public SatNode {
+public:
     char id[MAX_ID_LEN];
     bool negated;
 };
@@ -32,13 +60,13 @@ struct sat_atom_t {
  * Create a new SAT conjunction.
  * @return empty conjunction
  */
-sat_conj_t* create_sat_conj(void);
+SatConjunction* create_sat_conj(void);
 
 /**
  * Create a new SAT disjunction.
  * @return empty disjunction
  */
-sat_disj_t* create_sat_disj(void);
+SatDisjunction* create_sat_disj(void);
 
 /**
  * Create a new SAT atom.
@@ -46,56 +74,42 @@ sat_disj_t* create_sat_disj(void);
  * @param negated whether the atom is negated
  * @return corresponding atom
  */
-sat_atom_t* create_sat_atom(char* id, bool negated);
+SatAtom* create_sat_atom(char* id, bool negated);
 
 /**
  * Destroy a SAT conjunction.
  * @param conjunction conjunction to destroy
  */
-void destroy_sat_conj(sat_conj_t* conjunction);
+void destroy_sat_conj(SatConjunction* conjunction);
 
 /**
  * Destroy a SAT disjunction.
  * @param disjunction disjunction to destroy
  */
-void destroy_sat_disj(sat_disj_t* disjunction);
+void destroy_sat_disj(SatDisjunction* disjunction);
 
 /**
  * Destroy a SAT atom.
  * @param atom atom to destroy
  */
-void destroy_sat_atom(sat_atom_t* atom);
-
-/**
- * Add a disjunction to a conjunction.
- * @param conjunction conjunction to modify
- * @param disjunction disjunction to add
- */
-void sat_add_disjunction(sat_conj_t* conjunction, sat_disj_t* disjunction);
-
-/**
- * Add an atom to a disjunction.
- * @param disjunction disjunction to modify
- * @param atom atom to add
- */
-void sat_add_atom(sat_disj_t* disjunction, sat_atom_t* atom);
+void destroy_sat_atom(SatAtom* atom);
 
 /**
  * Print a conjunction to stdout.
  * @param conjunction conjunction to print
  */
-void print_sat_conj(sat_conj_t* conjunction);
+void print_sat_conj(SatConjunction* conjunction);
 
 /**
  * Print a disjunction to stdout.
  * @param disjunction disjunction to print
  */
-void print_sat_disj(sat_disj_t* disjunction);
+void print_sat_disj(SatDisjunction* disjunction);
 
 /**
  * Print an atom to stdout.
  * @param atom atom to print
  */
-void print_sat_atom(sat_atom_t* atom);
+void print_sat_atom(SatAtom* atom);
 
 #endif // CATTAC_SAT_H
