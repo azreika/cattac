@@ -7,7 +7,12 @@
 #define MAX_ID_LEN 256
 
 // meta
-typedef enum ast_type_id ast_type_id;
+typedef enum ast_type_id {
+    ASTTYPE_AND,
+    ASTTYPE_OR,
+    ASTTYPE_NOT,
+    ASTTYPE_VAR
+} ast_type_id;
 typedef struct ast_header_t ast_header_t;
 
 // ast node types
@@ -15,8 +20,6 @@ typedef struct ast_and_t ast_and_t;
 typedef struct ast_or_t ast_or_t;
 typedef struct ast_not_t ast_not_t;
 typedef struct ast_var_t ast_var_t;
-
-enum ast_type_id { ASTTYPE_AND, ASTTYPE_OR, ASTTYPE_NOT, ASTTYPE_VAR };
 
 struct ast_header_t {
     ast_type_id type;

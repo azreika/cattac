@@ -6,20 +6,18 @@
 #define MAX_STRING_LEN 256
 
 // meta
-typedef enum token_type_id token_type_id;
-typedef struct token_header_t token_header_t;
-
-// token types
-typedef struct token_t token_t;
-
-enum token_type_id {
+typedef enum token_type_id {
     TOKENTYPE_LPAREN,
     TOKENTYPE_RPAREN,
     TOKENTYPE_STRING,
     TOKENTYPE_AND,
     TOKENTYPE_OR,
     TOKENTYPE_NOT,
-};
+} token_type_id;
+typedef struct token_header_t token_header_t;
+
+// token types
+typedef struct token_t token_t;
 
 struct token_header_t {
     token_type_id type;

@@ -33,7 +33,7 @@ list* scan(char* program) {
             default:
                 assert(isalpha(c) && "unexpected character while scanning");
                 {
-                    char* str = calloc(sizeof(char), MAX_STRING_LEN + 1);
+                    char* str = (char*) calloc(sizeof(char), MAX_STRING_LEN + 1);
                     size_t size = 0;
                     while (*program != '\0' && isalpha(*program)) {
                         assert(size < MAX_STRING_LEN && "string too long");
@@ -51,7 +51,7 @@ list* scan(char* program) {
 }
 
 token_t* create_token(token_type_id type) {
-    token_t* token = malloc(sizeof(token_t));
+    token_t* token = (token_t*) malloc(sizeof(token_t));
     token->header.type = type;
     return token;
 }

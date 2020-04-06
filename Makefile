@@ -6,9 +6,9 @@ OBJ_DIR := obj
 SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-CC := gcc
+CC := g++
 CPPFLAGS := -Iinclude
-CFLAGS := -Wall -Werror -std=c11
+CFLAGS := -Wall -Werror -std=c++11
 
 .PHONY: all clean
 
