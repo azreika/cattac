@@ -5,13 +5,13 @@
 
 SatConjunction* create_sat_conj(void) {
     SatConjunction* ret = (SatConjunction*) malloc(sizeof(SatConjunction));
-    ret->disjunctions = create_list();
+    ret->disjunctions = std::vector<SatDisjunction*>();
     return ret;
 }
 
 SatDisjunction* create_sat_disj(void) {
     SatDisjunction* ret = (SatDisjunction*) malloc(sizeof(SatDisjunction));
-    ret->atoms = create_list();
+    ret->atoms = std::vector<SatAtom*>();
     return ret;
 }
 
@@ -27,22 +27,18 @@ SatAtom* create_sat_atom(char* id, bool negated) {
 }
 
 void destroy_sat_conj(SatConjunction* conjunction) {
-    list* disjunctions = conjunction->disjunctions;
-    for (uint64_t i = 0; i < disjunctions->size; i++) {
-        destroy_sat_disj((SatDisjunction*) disjunctions->elements[i]);
+    std::vector<SatDisjunction*> disjunctions = conjunction->disjunctions;
+    for (uint64_t i = 0; i < disjunctions.size(); i++) {
+        destroy_sat_disj((SatDisjunction*) disjunctions[i]);
     }
-    free(disjunctions->elements);
-    free(disjunctions);
     free(conjunction);
 }
 
 void destroy_sat_disj(SatDisjunction* disjunction) {
-    list* atoms = disjunction->atoms;
-    for (uint64_t i = 0; i < atoms->size; i++) {
-        destroy_sat_atom((SatAtom*) atoms->elements[i]);
+    std::vector<SatAtom*> atoms = disjunction->atoms;
+    for (uint64_t i = 0; i < atoms.size(); i++) {
+        destroy_sat_atom((SatAtom*) atoms[i]);
     }
-    free(atoms->elements);
-    free(atoms);
     free(disjunction);
 }
 
@@ -51,25 +47,25 @@ void destroy_sat_atom(SatAtom* atom) {
 }
 
 void print_sat_conj(SatConjunction* conjunction) {
-    list* disjunctions = conjunction->disjunctions;
+    std::vector<SatDisjunction*> disjunctions = conjunction->disjunctions;
     printf("( ");
-    for (size_t i = 0; i < disjunctions->size; i++) {
+    for (size_t i = 0; i < disjunctions.size(); i++) {
         if (i != 0) {
             printf(" & ");
         }
-        print_sat_disj((SatDisjunction*) disjunctions->elements[i]);
+        print_sat_disj((SatDisjunction*) disjunctions[i]);
     }
     printf(" )");
 }
 
 void print_sat_disj(SatDisjunction* disjunction) {
-    list* atoms = disjunction->atoms;
+    std::vector<SatAtom*> atoms = disjunction->atoms;
     printf("( ");
-    for (size_t i = 0; i < atoms->size; i++) {
+    for (size_t i = 0; i < atoms.size(); i++) {
         if (i != 0) {
             printf(" | ");
         }
-        print_sat_atom((SatAtom*) atoms->elements[i]);
+        print_sat_atom((SatAtom*) atoms[i]);
     }
     printf(" )");
 }

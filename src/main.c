@@ -57,10 +57,10 @@ int main(int argc, char** argv) {
 
     printf((char*) "\n");
     printf((char*) "Lexer test [ (al & !(bk | caa)) | d ]:\n");
-    list* tokens = scan((char*) "(al & !(bk | caa)) | d\n");
-    for (size_t i = 0; i < tokens->size; i++) {
+    std::vector<token_t*> tokens = scan((char*) "(al & !(bk | caa)) | d\n");
+    for (size_t i = 0; i < tokens.size(); i++) {
         if (i != 0) printf((char*) " ");
-        print_token((token_t*) tokens->elements[i]);
+        print_token((token_t*) tokens[i]);
     }
     printf((char*) "\n");
     return 0;

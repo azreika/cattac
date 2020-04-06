@@ -2,7 +2,7 @@
 #define CATTAC_AST_H
 
 #include <stdio.h>
-#include "list.h"
+#include <vector>
 
 #define MAX_ID_LEN 256
 
@@ -28,13 +28,13 @@ struct ast_header_t {
 // AST "and"
 struct ast_and_t {
     ast_header_t header;
-    list* operands;
+    std::vector<void*> operands;
 };
 
 // AST "or"
 struct ast_or_t {
     ast_header_t header;
-    list* operands;
+    std::vector<void*> operands;
 };
 
 // AST "not"

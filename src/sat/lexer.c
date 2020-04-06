@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 #include "lexer.h"
 
-list* scan(char* program) {
-    list* tokens = create_list();
+std::vector<token_t*> scan(char* program) {
+    std::vector<token_t*> tokens;
     while (*program != '\0') {
         char c = *program;
         if (isspace(c)) {
@@ -16,19 +17,19 @@ list* scan(char* program) {
         }
         switch (c) {
             case '(':
-                list_append(tokens, create_token(TOKENTYPE_LPAREN));
+                tokens.push_back(create_token(TOKENTYPE_LPAREN));
                 break;
             case ')':
-                list_append(tokens, create_token(TOKENTYPE_RPAREN));
+                tokens.push_back(create_token(TOKENTYPE_RPAREN));
                 break;
             case '!':
-                list_append(tokens, create_token(TOKENTYPE_NOT));
+                tokens.push_back(create_token(TOKENTYPE_NOT));
                 break;
             case '&':
-                list_append(tokens, create_token(TOKENTYPE_AND));
+                tokens.push_back(create_token(TOKENTYPE_AND));
                 break;
             case '|':
-                list_append(tokens, create_token(TOKENTYPE_OR));
+                tokens.push_back(create_token(TOKENTYPE_OR));
                 break;
             default:
                 assert(isalpha(c) && "unexpected character while scanning");
@@ -41,7 +42,7 @@ list* scan(char* program) {
                     }
                     token_t* token = create_token(TOKENTYPE_STRING);
                     token->value = str;
-                    list_append(tokens, token);
+                    tokens.push_back(token);
                 }
                 break;
         }

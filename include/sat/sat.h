@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "list.h"
+#include <vector>
 
 #define MAX_ID_LEN 256
 
@@ -20,14 +20,14 @@ class SatNode {};
  */
 class SatConjunction : public SatNode {
 public:
-    list* disjunctions;
+    std::vector<SatDisjunction*> disjunctions;
 
     /**
      * Add a disjunction to the conjunction.
      * @param disjunction disjunction to add
      */
     void addDisjunction(SatDisjunction* disjunction) {
-        list_append(disjunctions, disjunction);
+        disjunctions.push_back(disjunction);
     }
 };
 
@@ -36,14 +36,14 @@ public:
  */
 class SatDisjunction : public SatNode {
 public:
-    list* atoms;
+    std::vector<SatAtom*> atoms;
 
     /**
      * Add an atom to the disjunction.
      * @param atom atom to add
      */
     void addAtom(SatAtom* atom) {
-        list_append(atoms, atom);
+        atoms.push_back(atom);
     }
 };
 

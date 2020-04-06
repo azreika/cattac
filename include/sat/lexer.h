@@ -1,7 +1,7 @@
 #ifndef CATTAC_LEXER_H
 #define CATTAC_LEXER_H
 
-#include "list.h"
+#include <vector>
 
 #define MAX_STRING_LEN 256
 
@@ -30,11 +30,11 @@ struct token_t {
 };
 
 /**
- * Scan a program into a list of tokens.
+ * Scan a program into a vector of tokens.
  * @param program program to parse
  * @return list of tokens
  */
-list* scan(char* program);
+std::vector<token_t*> scan(char* program);
 
 /**
  * Create a token of the given type.

@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "ast.h"
@@ -7,14 +8,14 @@
 ast_and_t* create_ast_and() {
     ast_and_t* and_op = (ast_and_t*) malloc(sizeof(ast_and_t));
     and_op->header.type = ASTTYPE_AND;
-    and_op->operands = create_list();
+    and_op->operands = std::vector<void*>();
     return and_op;
 }
 
 ast_or_t* create_ast_or() {
     ast_or_t* or_op = (ast_or_t*) malloc(sizeof(ast_or_t));
     or_op->header.type = ASTTYPE_OR;
-    or_op->operands = create_list();
+    or_op->operands = std::vector<void*>();
     return or_op;
 }
 
@@ -54,17 +55,17 @@ void destroy_ast_node(void* node) {
 }
 
 void destroy_ast_and(ast_and_t* and_op) {
-    list* operands = and_op->operands;
-    for (uint64_t i = 0; i < operands->size; i++) {
-        destroy_ast_node(operands->elements[i]);
+    std::vector<void*> operands = and_op->operands;
+    for (uint64_t i = 0; i < operands.size(); i++) {
+        destroy_ast_node(operands[i]);
     }
     free(and_op);
 }
 
 void destroy_ast_or(ast_or_t* or_op) {
-    list* operands = or_op->operands;
-    for (uint64_t i = 0; i < operands->size; i++) {
-        destroy_ast_node(operands->elements[i]);
+    std::vector<void*> operands = or_op->operands;
+    for (uint64_t i = 0; i < operands.size(); i++) {
+        destroy_ast_node(operands[i]);
     }
     free(or_op);
 }
@@ -79,33 +80,33 @@ void destroy_ast_var(ast_var_t* var_op) {
 }
 
 void ast_and_append(ast_and_t* and_op, void* operand) {
-    list_append(and_op->operands, operand);
+    and_op->operands.push_back(operand);
 }
 
 void ast_or_append(ast_or_t* or_op, void* operand) {
-    list_append(or_op->operands, operand);
+    or_op->operands.push_back(operand);
 }
 
 void print_ast_and(ast_and_t* and_op) {
     printf("(");
-    list* operands = and_op->operands;
-    for (uint64_t i = 0; i < operands->size; i++) {
+    std::vector<void*> operands = and_op->operands;
+    for (uint64_t i = 0; i < operands.size(); i++) {
         if (i != 0) {
             printf(" & ");
         }
-        print_ast_node(operands->elements[i]);
+        print_ast_node(operands[i]);
     }
     printf(")");
 }
 
 void print_ast_or(ast_or_t* or_op) {
     printf("(");
-    list* operands = or_op->operands;
-    for (uint64_t i = 0; i < operands->size; i++) {
+    std::vector<void*> operands = or_op->operands;
+    for (uint64_t i = 0; i < operands.size(); i++) {
         if (i != 0) {
             printf(" | ");
         }
-        print_ast_node(operands->elements[i]);
+        print_ast_node(operands[i]);
     }
     printf(")");
 }
