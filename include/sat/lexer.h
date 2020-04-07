@@ -21,6 +21,40 @@ struct token_header_t {
     token_type_id type;
 };
 
+/**
+ * Structure to carry out the lexing stage of language parsing.
+ */
+class Lexer {
+public:
+    Lexer(std::string program) : program(program) {
+        run();
+    }
+
+    /**
+     * Retrieve the token stream represented by the program.
+     * @return a vector of tokens
+     */
+    const std::vector<token_t*>& getTokens() const {
+        return tokens;
+    }
+
+private:
+    std::string program;
+    std::vector<token_t*> tokens{};
+
+    /**
+     * Add a token to the internal token stream.
+     * @param type type of token to add
+     * @param value (optional) value tied to the token
+     */
+    void addToken(token_type_id type, std::string* value = nullptr);
+
+    /**
+     * Produce the token stream represented by the source program.
+     */
+    void run();
+};
+
 // Lexer tokens
 struct token_t {
     token_header_t header;

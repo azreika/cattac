@@ -8,8 +8,7 @@
 #include <vector>
 #include "lexer.h"
 
-std::vector<token_t*> scan(std::string program) {
-    std::vector<token_t*> tokens;
+void Lexer::run() {
     size_t idx = 0;
     while (idx < program.length()) {
         char c = program[idx];
@@ -19,19 +18,19 @@ std::vector<token_t*> scan(std::string program) {
         }
         switch (c) {
             case '(':
-                tokens.push_back(create_token(TOKENTYPE_LPAREN));
+                addToken(TOKENTYPE_LPAREN);
                 break;
             case ')':
-                tokens.push_back(create_token(TOKENTYPE_RPAREN));
+                addToken(TOKENTYPE_RPAREN);
                 break;
             case '!':
-                tokens.push_back(create_token(TOKENTYPE_NOT));
+                addToken(TOKENTYPE_NOT);
                 break;
             case '&':
-                tokens.push_back(create_token(TOKENTYPE_AND));
+                addToken(TOKENTYPE_AND);
                 break;
             case '|':
-                tokens.push_back(create_token(TOKENTYPE_OR));
+                addToken(TOKENTYPE_OR);
                 break;
             default:
                 assert(isalpha(c) && "unexpected character while scanning");
@@ -41,21 +40,19 @@ std::vector<token_t*> scan(std::string program) {
                         str += program[idx];
                         idx++;
                     }
-                    token_t* token = create_token(TOKENTYPE_STRING);
-                    token->value = new std::string(str);
-                    tokens.push_back(token);
+                    addToken(TOKENTYPE_STRING, new std::string(str));
                 }
                 break;
         }
         idx++;
     }
-    return tokens;
 }
 
-token_t* create_token(token_type_id type) {
+void Lexer::addToken(token_type_id type, std::string* value) {
     token_t* token = (token_t*) malloc(sizeof(token_t));
     token->header.type = type;
-    return token;
+    token->value = value;
+    tokens.push_back(token);
 }
 
 void print_token(token_t* token) {
@@ -77,7 +74,7 @@ void print_token(token_t* token) {
             printf("NOT");
             break;
         case TOKENTYPE_STRING:
-            std::cout << *token->value;
+            std::cout << "VAR[" << *token->value << "]";
             break;
         default:
             assert(false && "unexpected token type");
