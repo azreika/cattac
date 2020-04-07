@@ -3,16 +3,18 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <string>
 #include <vector>
 #include "lexer.h"
 
-std::vector<token_t*> scan(char* program) {
+std::vector<token_t*> scan(std::string program) {
     std::vector<token_t*> tokens;
-    while (*program != '\0') {
-        char c = *program;
+    size_t idx = 0;
+    while (idx < program.length()) {
+        char c = program[idx];
         if (isspace(c)) {
-            program++;
+            idx++;
             continue;
         }
         switch (c) {
@@ -34,19 +36,18 @@ std::vector<token_t*> scan(char* program) {
             default:
                 assert(isalpha(c) && "unexpected character while scanning");
                 {
-                    char* str = (char*) calloc(sizeof(char), MAX_STRING_LEN + 1);
-                    size_t size = 0;
-                    while (*program != '\0' && isalpha(*program)) {
-                        assert(size < MAX_STRING_LEN && "string too long");
-                        str[size++] = *(program++);
+                    std::string str = "";
+                    while (program[idx] != '\0' && isalpha(program[idx])) {
+                        str += program[idx];
+                        idx++;
                     }
                     token_t* token = create_token(TOKENTYPE_STRING);
-                    token->value = str;
+                    token->value = new std::string(str);
                     tokens.push_back(token);
                 }
                 break;
         }
-        program++;
+        idx++;
     }
     return tokens;
 }
@@ -76,7 +77,7 @@ void print_token(token_t* token) {
             printf("NOT");
             break;
         case TOKENTYPE_STRING:
-            printf("STRING[%s]", (char*) token->value);
+            std::cout << *token->value;
             break;
         default:
             assert(false && "unexpected token type");

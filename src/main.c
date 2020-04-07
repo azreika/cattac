@@ -4,9 +4,9 @@
 #include "SatNode.h"
 
 int main(int argc, char** argv) {
-    printf((char*) "Welcome to CattaC.\n");
+    std::cout << "Welcome to CattaC." << std::endl;
 
-    printf((char*) "SAT test:\n");
+    std::cout << "SAT test:" << std::endl;
     SatDisjunction* porq = new SatDisjunction();
     SatAtom* p1 = new SatAtom("p", false);
     SatAtom* q1 = new SatAtom("q", false); 
@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     result->addDisjunction(notq);
     std::cout << *result << std::endl;
 
-    printf((char*) "\n");
-    printf((char*) "AST test [ (a & !(b v c)) v d ]:\n");
+    std::cout << std::endl;
+    std::cout << "AST test [ (a & !(b v c)) v d ]:" << std::endl;
 
     // b v c
     ast_or_t* level0010 = create_ast_or();
@@ -48,17 +48,17 @@ int main(int argc, char** argv) {
     ast_or_append(level0, level01);
 
     print_ast_node(level0);
-    printf((char*) "\n");
+    std::cout << std::endl;
 
     destroy_ast_node(level0);
 
-    printf((char*) "\n");
-    printf((char*) "Lexer test [ (al & !(bk | caa)) | d ]:\n");
-    std::vector<token_t*> tokens = scan((char*) "(al & !(bk | caa)) | d\n");
+    std::cout << std::endl;
+    std::cout << "Lexer test [ (al & !(bk | caa)) | d ]:" << std::endl;
+    std::vector<token_t*> tokens = scan("(al & !(bk | caa)) | d\n");
     for (size_t i = 0; i < tokens.size(); i++) {
-        if (i != 0) printf((char*) " ");
+        if (i != 0) std::cout << " ";
         print_token((token_t*) tokens[i]);
     }
-    printf((char*) "\n");
+    std::cout << std::endl;
     return 0;
 }

@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#define MAX_STRING_LEN 256
-
 // meta
 typedef enum token_type_id {
     TOKENTYPE_LPAREN,
@@ -26,7 +24,7 @@ struct token_header_t {
 // Lexer tokens
 struct token_t {
     token_header_t header;
-    void* value;
+    std::string* value;
 };
 
 /**
@@ -34,7 +32,7 @@ struct token_t {
  * @param program program to parse
  * @return list of tokens
  */
-std::vector<token_t*> scan(char* program);
+std::vector<token_t*> scan(std::string program);
 
 /**
  * Create a token of the given type.
