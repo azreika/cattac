@@ -1,12 +1,9 @@
-#include <assert.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
-#include "lexer.h"
+
+#include "Lexer.h"
 
 void Lexer::run() {
     size_t idx = 0;
