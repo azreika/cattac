@@ -8,19 +8,19 @@ SAT_SRC_DIR := $(SRC_DIR)/sat
 SAT_OBJ_DIR := $(OBJ_DIR)/sat
 SAT_INC_DIR := $(INC_DIR)/sat
 
-SAT_SRC := $(wildcard $(SAT_SRC_DIR)/*.c)
+SAT_SRC := $(wildcard $(SAT_SRC_DIR)/*.c) $(wildcard $(SAT_SRC_DIR)/*.cpp)
 SAT_OBJ := $(SAT_SRC:$(SAT_SRC_DIR)/%.c=$(SAT_OBJ_DIR)/%.o)
 
 CC := g++
 CPPFLAGS := -I$(SAT_INC_DIR)
-CFLAGS := -Wall -Werror -std=c++11
+CFLAGS := -Wall -Werror -std=c++11 -g
 
 .PHONY: all clean
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ_DIR)/main.o $(SAT_OBJ)
-	$(CC) $^ -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@

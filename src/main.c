@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ast.h"
 #include "lexer.h"
-#include "sat.h"
+#include "SatNode.h"
 
 int main(int argc, char** argv) {
     printf((char*) "Welcome to CattaC.\n");

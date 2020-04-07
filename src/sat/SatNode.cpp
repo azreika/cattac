@@ -1,7 +1,4 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-#include "sat.h"
+#include "SatNode.h"
 
 void SatConjunction::print(std::ostream& os) const {
     os << "(";
