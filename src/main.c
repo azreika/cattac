@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <iostream>
 #include "ast.h"
 #include "lexer.h"
 #include "sat.h"
@@ -7,23 +7,20 @@ int main(int argc, char** argv) {
     printf((char*) "Welcome to CattaC.\n");
 
     printf((char*) "SAT test:\n");
-    SatDisjunction* porq = create_sat_disj();
-    SatAtom* p1 = create_sat_atom((char*) "p", false);
-    SatAtom* q1 = create_sat_atom((char*) "q", false);
+    SatDisjunction* porq = new SatDisjunction();
+    SatAtom* p1 = new SatAtom("p", false);
+    SatAtom* q1 = new SatAtom("q", false); 
     porq->addAtom(p1);
     porq->addAtom(q1);
 
-    SatDisjunction* notq = create_sat_disj();
-    SatAtom* q2 = create_sat_atom((char*) "q", true);
+    SatDisjunction* notq = new SatDisjunction();
+    SatAtom* q2 = new SatAtom("q", true);
     notq->addAtom(q2);
 
-    SatConjunction* result = create_sat_conj();
+    SatConjunction* result = new SatConjunction();
     result->addDisjunction(porq);
     result->addDisjunction(notq);
-
-    print_sat_conj(result);
-    printf((char*) "\n");
-    destroy_sat_conj(result);
+    std::cout << *result << std::endl;
 
     printf((char*) "\n");
     printf((char*) "AST test [ (a & !(b v c)) v d ]:\n");
