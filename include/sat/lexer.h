@@ -1,28 +1,13 @@
-#ifndef CATTAC_LEXER_H
-#define CATTAC_LEXER_H
+#pragma once
 
 #include <vector>
 
-// meta
-typedef enum token_type_id {
-    TOKENTYPE_LPAREN,
-    TOKENTYPE_RPAREN,
-    TOKENTYPE_STRING,
-    TOKENTYPE_AND,
-    TOKENTYPE_OR,
-    TOKENTYPE_NOT,
-} token_type_id;
-typedef struct token_header_t token_header_t;
-
-// token types
-typedef struct token_t token_t;
-
-struct token_header_t {
-    token_type_id type;
-};
+class Lexer;
+class Token;
+enum class TokenType;
 
 /**
- * Structure to carry out the lexing stage of language parsing.
+ * Structure to carry out the lexing stage of SAT language parsing.
  */
 class Lexer {
 public:
@@ -34,20 +19,20 @@ public:
      * Retrieve the token stream represented by the program.
      * @return a vector of tokens
      */
-    const std::vector<token_t*>& getTokens() const {
+    const std::vector<Token*>& getTokens() const {
         return tokens;
     }
 
 private:
     std::string program;
-    std::vector<token_t*> tokens{};
+    std::vector<Token*> tokens{};
 
     /**
      * Add a token to the internal token stream.
      * @param type type of token to add
      * @param value (optional) value tied to the token
      */
-    void addToken(token_type_id type, std::string* value = nullptr);
+    void addToken(TokenType type, std::string* value = nullptr);
 
     /**
      * Produce the token stream represented by the source program.
@@ -55,30 +40,42 @@ private:
     void run();
 };
 
-// Lexer tokens
-struct token_t {
-    token_header_t header;
+/**
+ * Represents a type that a token type can belong to.
+ */
+enum class TokenType {
+    LPAREN,
+    RPAREN,
+    STRING,
+    AND,
+    OR,
+    NOT,
+};
+
+/**
+ * Represents a token in the SAT grammar.
+ */
+class Token {
+public:
+    Token(TokenType type, std::string* value) : type(type), value(value) {}
+    Token(TokenType type) : type(type), value(nullptr) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const Token& token) {
+        token.print(os);
+        return os;
+    }
+
+protected:
+    void print(std::ostream& os) const;
+
+private:
+    TokenType type;
     std::string* value;
 };
 
 /**
- * Scan a program into a vector of tokens.
- * @param program program to parse
- * @return list of tokens
+ * Print a given token type to an output stream.
+ * @param tokenType token type to print
+ * @param os output stream to redirect to
  */
-std::vector<token_t*> scan(std::string program);
-
-/**
- * Create a token of the given type.
- * @param type type of the token to create
- * @return token with the given type
- */
-token_t* create_token(token_type_id type);
-
-/**
- * Print a token.
- * @param token token to print
- */
-void print_token(token_t* token);
-
-#endif // CATTAC_LEXER_H
+void printTokenType(const TokenType& tokenType, std::ostream& os);

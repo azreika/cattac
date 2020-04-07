@@ -18,19 +18,19 @@ void Lexer::run() {
         }
         switch (c) {
             case '(':
-                addToken(TOKENTYPE_LPAREN);
+                addToken(TokenType::LPAREN);
                 break;
             case ')':
-                addToken(TOKENTYPE_RPAREN);
+                addToken(TokenType::RPAREN);
                 break;
             case '!':
-                addToken(TOKENTYPE_NOT);
+                addToken(TokenType::NOT);
                 break;
             case '&':
-                addToken(TOKENTYPE_AND);
+                addToken(TokenType::AND);
                 break;
             case '|':
-                addToken(TOKENTYPE_OR);
+                addToken(TokenType::OR);
                 break;
             default:
                 assert(isalpha(c) && "unexpected character while scanning");
@@ -40,7 +40,7 @@ void Lexer::run() {
                         str += program[idx];
                         idx++;
                     }
-                    addToken(TOKENTYPE_STRING, new std::string(str));
+                    addToken(TokenType::STRING, new std::string(str));
                 }
                 break;
         }
@@ -48,33 +48,37 @@ void Lexer::run() {
     }
 }
 
-void Lexer::addToken(token_type_id type, std::string* value) {
-    token_t* token = (token_t*) malloc(sizeof(token_t));
-    token->header.type = type;
-    token->value = value;
-    tokens.push_back(token);
+void Lexer::addToken(TokenType type, std::string* value) {
+    tokens.push_back(new Token(type, value));
 }
 
-void print_token(token_t* token) {
-    token_type_id type = ((struct token_header_t*) token)->type;
-    switch (type) {
-        case TOKENTYPE_LPAREN:
-            printf("LPAREN");
+void Token::print(std::ostream& os) const {
+    printTokenType(type, os);
+    if (type == TokenType::STRING) {
+        assert(value != nullptr && "expected value in token");
+        os << "[" << *value << "]";
+    }
+}
+
+void printTokenType(const TokenType& tokenType, std::ostream& os) {
+    switch (tokenType) {
+        case TokenType::LPAREN:
+            os << "LPAREN";
             break;
-        case TOKENTYPE_RPAREN:
-            printf("RPAREN");
+        case TokenType::RPAREN:
+            os << "RPAREN";
             break;
-        case TOKENTYPE_AND:
-            printf("AND");
+        case TokenType::AND:
+            os << "AND";
             break;
-        case TOKENTYPE_OR:
-            printf("OR");
+        case TokenType::OR:
+            os << "OR";
             break;
-        case TOKENTYPE_NOT:
-            printf("NOT");
+        case TokenType::NOT:
+            os << "NOT";
             break;
-        case TOKENTYPE_STRING:
-            std::cout << "VAR[" << *token->value << "]";
+        case TokenType::STRING:
+            os << "VAR";
             break;
         default:
             assert(false && "unexpected token type");

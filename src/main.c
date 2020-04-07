@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     const auto& tokens = lexer.getTokens();
     for (size_t i = 0; i < tokens.size(); i++) {
         if (i != 0) std::cout << " ";
-        print_token((token_t*) tokens[i]);
+        std::cout << *tokens[i];
     }
     std::cout << std::endl;
     return 0;
