@@ -1,6 +1,6 @@
 #include <iostream>
-#include "ast.h"
-#include "lexer.h"
+#include "AstNode.h"
+#include "Lexer.h"
 #include "SatNode.h"
 
 int main(int argc, char** argv) {

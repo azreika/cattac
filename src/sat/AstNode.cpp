@@ -1,9 +1,11 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ast.h"
+
+#include "AstNode.h"
 
 ast_and_t* create_ast_and() {
     ast_and_t* and_op = (ast_and_t*) malloc(sizeof(ast_and_t));

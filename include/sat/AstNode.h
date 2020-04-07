@@ -1,7 +1,6 @@
 #ifndef CATTAC_AST_H
 #define CATTAC_AST_H
 
-#include <stdio.h>
 #include <vector>
 
 #define MAX_ID_LEN 256
