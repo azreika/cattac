@@ -1,6 +1,7 @@
 #include <iostream>
 #include "AstNode.h"
 #include "Lexer.h"
+#include "Parser.h"
 #include "SatNode.h"
 
 int main(int argc, char** argv) {
@@ -58,5 +59,10 @@ int main(int argc, char** argv) {
         std::cout << *tokens[i];
     }
     std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "Parsing test:" << std::endl;
+    Parser* parser = new Parser(lexer->getTokens());
+    std::cout << *parser->getProgram() << std::endl;
     return 0;
 }

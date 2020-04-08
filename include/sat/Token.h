@@ -16,6 +16,7 @@ enum class TokenType {
     AND,
     OR,
     NOT,
+    END,
 };
 
 /**
@@ -24,7 +25,16 @@ enum class TokenType {
 class Token {
 public:
     Token(TokenType type, std::string value, size_t col, size_t line) : type(type), value(value), col(col), line(line) {}
+
     Token(TokenType type, size_t col, size_t line) : type(type), value(""), col(col), line(line) {}
+
+    TokenType getType() const {
+        return type;
+    }
+
+    std::string getValue() const {
+        return value;
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const Token& token) {
         token.print(os);

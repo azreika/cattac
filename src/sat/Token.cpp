@@ -31,6 +31,9 @@ void printTokenType(const TokenType& tokenType, std::ostream& os) {
         case TokenType::VARIABLE:
             os << "VAR";
             break;
+        case TokenType::END:
+            os << "END";
+            break;
         default:
             assert(false && "unexpected token type");
     }

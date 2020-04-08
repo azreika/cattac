@@ -11,6 +11,8 @@ void Lexer::run() {
         currTokenStart = idx;
         scanNextToken();
     }
+    currTokenStart = idx;
+    addToken(TokenType::END);
 }
 
 void Lexer::scanNextToken() {
