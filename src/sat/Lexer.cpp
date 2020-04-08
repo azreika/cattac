@@ -16,7 +16,7 @@ void Lexer::scanNextToken() {
     char c = advance();
     switch (c) {
         // Deal with whitespace
-        case '\n': line += 1; col = 0;
+        case '\n': line += 1; currLineStart = idx;
         case ' ':
         case '\t': break;
 
@@ -49,11 +49,11 @@ bool Lexer::hasNext() const {
 }
 
 void Lexer::addToken(TokenType type) {
-    tokens.push_back(new Token(type));
+    tokens.push_back(new Token(type, currTokenStart - currLineStart, line));
 }
 
 void Lexer::addToken(TokenType type, std::string value) {
-    tokens.push_back(new Token(type, std::move(value)));
+    tokens.push_back(new Token(type, value, currTokenStart - currLineStart, line));
 }
 
 char Lexer::peek() const {
@@ -63,7 +63,6 @@ char Lexer::peek() const {
 
 char Lexer::advance() {
     assert(hasNext() && "unexpected idx position");
-    col++;
     return program[idx++];
 }
 
@@ -72,6 +71,7 @@ void Token::print(std::ostream& os) const {
     if (type == TokenType::VARIABLE) {
         os << "[" << value << "]";
     }
+    os << "@(" << line << ":" << col << ")";
 }
 
 void printTokenType(const TokenType& tokenType, std::ostream& os) {

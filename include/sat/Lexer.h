@@ -26,9 +26,9 @@ public:
 
 private:
     std::string program;
-    size_t line{0};
-    size_t col{0};
     size_t idx{0};
+    size_t line{0};
+    size_t currLineStart{0};
     size_t currTokenStart{0};
     std::vector<Token*> tokens{};
 
@@ -98,8 +98,8 @@ enum class TokenType {
  */
 class Token {
 public:
-    Token(TokenType type, std::string value) : type(type), value(value) {}
-    Token(TokenType type) : type(type), value("") {}
+    Token(TokenType type, std::string value, size_t col, size_t line) : type(type), value(value), col(col), line(line) {}
+    Token(TokenType type, size_t col, size_t line) : type(type), value(""), col(col), line(line) {}
 
     friend std::ostream& operator<<(std::ostream& os, const Token& token) {
         token.print(os);
@@ -112,6 +112,8 @@ protected:
 private:
     TokenType type;
     std::string value;
+    size_t col;
+    size_t line;
 };
 
 /**
