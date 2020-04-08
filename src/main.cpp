@@ -26,31 +26,28 @@ int main(int argc, char** argv) {
     std::cout << "AST test [ (a & !(b v c)) v d ]:" << std::endl;
 
     // b v c
-    ast_or_t* level0010 = create_ast_or();
-    ast_var_t* level00100 = create_ast_var((char*) "b");
-    ast_var_t* level00101 = create_ast_var((char*) "c");
-    ast_or_append(level0010, level00100);
-    ast_or_append(level0010, level00101);
+    AstOr* level0010 = new AstOr();
+    AstVar* level00100 = new AstVar((char*) "b");
+    AstVar* level00101 = new AstVar((char*) "c");
+    level0010->addOperand(level00100);
+    level0010->addOperand(level00101);
 
     // !(b v c)
-    ast_not_t* level001 = create_ast_not(level0010);
+    AstNot* level001 = new AstNot(level0010);
 
     // (a & !(b v c))
-    ast_and_t* level00 = create_ast_and();
-    ast_var_t* level000 = create_ast_var((char*) "a");
-    ast_and_append(level00, level000);
-    ast_and_append(level00, level001);
+    AstAnd* level00 = new AstAnd();
+    AstVar* level000 = new AstVar((char*) "a");
+    level00->addOperand(level000);
+    level00->addOperand(level001);
 
     // (a & !(b v c)) v d
-    ast_or_t* level0 = create_ast_or();
-    ast_var_t* level01 = create_ast_var((char*) "d");
-    ast_or_append(level0, level00);
-    ast_or_append(level0, level01);
+    AstOr* level0 = new AstOr();
+    AstVar* level01 = new AstVar((char*) "d");
+    level0->addOperand(level00);
+    level0->addOperand(level01);
 
-    print_ast_node(level0);
-    std::cout << std::endl;
-
-    destroy_ast_node(level0);
+    std::cout << *level0 << std::endl;
 
     std::cout << std::endl;
     std::cout << "Lexer test [ (al & !(bk | caa)) | d ]:" << std::endl;
