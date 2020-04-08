@@ -26,19 +26,59 @@ public:
 
 private:
     std::string program;
+    size_t line{0};
+    size_t col{0};
+    size_t idx{0};
+    size_t currTokenStart{0};
     std::vector<Token*> tokens{};
-
-    /**
-     * Add a token to the internal token stream.
-     * @param type type of token to add
-     * @param value (optional) value tied to the token
-     */
-    void addToken(TokenType type, std::string* value = nullptr);
 
     /**
      * Produce the token stream represented by the source program.
      */
     void run();
+
+    /**
+     * Checks whether the end of the program has been hit.
+     * @return true iff there may be more tokens to scan
+     */
+    bool hasNext() const;
+
+    /**
+     * Scans the next token in the sequence.
+     * @return the next token in the sequence
+     */
+    void scanNextToken();
+
+    /**
+     * Scans the identifier at the current point in the sequence.
+     * @return the string representation of the identifier
+     */
+    std::string scanIdentifier();
+
+    /**
+     * Add a token to the internal token stream.
+     * @param type type of token to add
+     */
+    void addToken(TokenType type);
+
+    /**
+     * Add a token with a value to the internal token stream.
+     * @param type type of token to add
+     * @param value (optional) value tied to the token
+     */
+    void addToken(TokenType type, std::string value);
+
+    /**
+     * Advance the pointer by one character.
+     * @return the character that was being pointed to
+     */
+    char advance();
+
+    /**
+     * Peek at the current position in the program.
+     * @return the current character being pointed to
+     */
+    char peek() const;
 };
 
 /**
@@ -47,7 +87,7 @@ private:
 enum class TokenType {
     LPAREN,
     RPAREN,
-    STRING,
+    VARIABLE,
     AND,
     OR,
     NOT,
@@ -58,8 +98,8 @@ enum class TokenType {
  */
 class Token {
 public:
-    Token(TokenType type, std::string* value) : type(type), value(value) {}
-    Token(TokenType type) : type(type), value(nullptr) {}
+    Token(TokenType type, std::string value) : type(type), value(value) {}
+    Token(TokenType type) : type(type), value("") {}
 
     friend std::ostream& operator<<(std::ostream& os, const Token& token) {
         token.print(os);
@@ -71,7 +111,7 @@ protected:
 
 private:
     TokenType type;
-    std::string* value;
+    std::string value;
 };
 
 /**

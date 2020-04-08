@@ -6,54 +6,71 @@
 #include "Lexer.h"
 
 void Lexer::run() {
-    size_t idx = 0;
-    while (idx < program.length()) {
-        char c = program[idx];
-        if (isspace(c)) {
-            idx++;
-            continue;
-        }
-        switch (c) {
-            case '(':
-                addToken(TokenType::LPAREN);
-                break;
-            case ')':
-                addToken(TokenType::RPAREN);
-                break;
-            case '!':
-                addToken(TokenType::NOT);
-                break;
-            case '&':
-                addToken(TokenType::AND);
-                break;
-            case '|':
-                addToken(TokenType::OR);
-                break;
-            default:
-                assert(isalpha(c) && "unexpected character while scanning");
-                {
-                    std::string str = "";
-                    while (program[idx] != '\0' && isalpha(program[idx])) {
-                        str += program[idx];
-                        idx++;
-                    }
-                    addToken(TokenType::STRING, new std::string(str));
-                }
-                break;
-        }
-        idx++;
+    while (hasNext()) {
+        currTokenStart = idx;
+        scanNextToken();
     }
 }
 
-void Lexer::addToken(TokenType type, std::string* value) {
-    tokens.push_back(new Token(type, value));
+void Lexer::scanNextToken() {
+    char c = advance();
+    switch (c) {
+        // Deal with whitespace
+        case '\n': line += 1; col = 0;
+        case ' ':
+        case '\t': break;
+
+        case '(': addToken(TokenType::LPAREN); break;
+        case ')': addToken(TokenType::RPAREN); break;
+        case '!': addToken(TokenType::NOT); break;
+        case '&': addToken(TokenType::AND); break;
+        case '|': addToken(TokenType::OR); break;
+
+        default: {
+            if (isalpha(c)) {
+                addToken(TokenType::VARIABLE, scanIdentifier());
+            } else {
+                assert(false && "unexpected character");
+            }
+        }
+    }
+}
+
+std::string Lexer::scanIdentifier() {
+    while (hasNext() && isalpha(peek())) {
+        advance();
+    }
+    return program.substr(currTokenStart, idx - currTokenStart);
+}
+
+bool Lexer::hasNext() const {
+    assert(idx <= program.length() && "unexpected idx position");
+    return idx < program.length();
+}
+
+void Lexer::addToken(TokenType type) {
+    tokens.push_back(new Token(type));
+}
+
+void Lexer::addToken(TokenType type, std::string value) {
+    tokens.push_back(new Token(type, std::move(value)));
+}
+
+char Lexer::peek() const {
+    assert(hasNext() && "unexpected idx position");
+    return program[idx];
+}
+
+char Lexer::advance() {
+    assert(hasNext() && "unexpected idx position");
+    col++;
+    return program[idx++];
 }
 
 void Token::print(std::ostream& os) const {
     printTokenType(type, os);
-    if (type == TokenType::STRING) {
-        assert(value != nullptr && "expected value in token");
-        os << "[" << *value << "]";
+    if (type == TokenType::VARIABLE) {
+        os << "[" << value << "]";
     }
 }
 
@@ -74,7 +91,7 @@ void printTokenType(const TokenType& tokenType, std::ostream& os) {
         case TokenType::NOT:
             os << "NOT";
             break;
-        case TokenType::STRING:
+        case TokenType::VARIABLE:
             os << "VAR";
             break;
         default:

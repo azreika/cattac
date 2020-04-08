@@ -51,8 +51,8 @@ int main(int argc, char** argv) {
 
     std::cout << std::endl;
     std::cout << "Lexer test [ (al & !(bk | caa)) | d ]:" << std::endl;
-    Lexer lexer = Lexer("(al & !(bk | caa)) | d\n");
-    const auto& tokens = lexer.getTokens();
+    Lexer* lexer = new Lexer("(al & !(bk | caa)) | d\n");
+    const auto& tokens = lexer->getTokens();
     for (size_t i = 0; i < tokens.size(); i++) {
         if (i != 0) std::cout << " ";
         std::cout << *tokens[i];
