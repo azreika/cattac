@@ -12,10 +12,7 @@ void Parser::run() {
 AstNode* Parser::parseExpression() {
     AstNode* expression = parseConjunction();
     if (match(TokenType::OR)) {
-        AstOr* disjunction = new AstOr();
-        disjunction->addOperand(expression);
-        disjunction->addOperand(parseExpression());
-        expression = disjunction;
+        expression = new AstOr(expression, parseExpression());
     }
     return expression;
 }
@@ -23,10 +20,7 @@ AstNode* Parser::parseExpression() {
 AstNode* Parser::parseConjunction() {
     AstNode* term = parseTerm();
     if (match(TokenType::AND)) {
-        AstAnd* conjunction = new AstAnd();
-        conjunction->addOperand(term);
-        conjunction->addOperand(parseExpression());
-        term = conjunction;
+        term = new AstAnd(term, parseExpression());
     }
     return term;
 }

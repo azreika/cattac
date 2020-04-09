@@ -3,6 +3,15 @@
 #include <iostream>
 #include <vector>
 
+class AstNode;
+class AstAnd;
+class AstOr;
+class AstNot;
+class AstVar;
+
+/**
+ * Represents a generic node in the AST.
+ */
 class AstNode {
 public:
     friend std::ostream& operator<<(std::ostream& os, const AstNode& node) {
@@ -14,36 +23,39 @@ protected:
     virtual void print(std::ostream& os) const = 0;
 };
 
+/**
+ * Represents an "X & Y" in a logical formula.
+ */
 class AstAnd : public AstNode {
 public:
-    AstAnd() = default;
-
-    void addOperand(AstNode* operand) {
-        operands.push_back(operand);
-    }
+    AstAnd(AstNode* left, AstNode* right) : left(left), right(right) {}
 
 protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::vector<AstNode*> operands;
+    AstNode* left;
+    AstNode* right;
 };
 
+/**
+ * Represents an "X | Y" in a logical formula.
+ */
 class AstOr : public AstNode {
 public:
-    AstOr() = default;
-
-    void addOperand(AstNode* operand) {
-        operands.push_back(operand);
-    }
+    AstOr(AstNode* left, AstNode* right) : left(left), right(right) {}
 
 protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::vector<AstNode*> operands;
+    AstNode* left;
+    AstNode* right;
 };
 
+/**
+ * Represents an "!X" in a logical formula.
+ */
 class AstNot : public AstNode {
 public:
     AstNot(AstNode* operand) : operand(operand) {}
@@ -55,6 +67,9 @@ private:
     AstNode* operand;
 };
 
+/**
+ * Represents a variable in a logical formula.
+ */
 class AstVar : public AstNode {
 public:
     AstVar(std::string id) : id(id) {}

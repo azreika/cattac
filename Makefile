@@ -22,7 +22,7 @@ all: $(TARGET)
 $(TARGET): $(OBJ_DIR)/main.o $(SAT_OBJ)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp
+$(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp $(SAT_SRC)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(SAT_OBJ_DIR)/%.o: $(SAT_SRC_DIR)/%.cpp $(SAT_INC_DIR)/%.h | $(SAT_OBJ_DIR)

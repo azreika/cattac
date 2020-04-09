@@ -27,26 +27,20 @@ int main(int argc, char** argv) {
     std::cout << "AST test [ (a & !(b v c)) v d ]:" << std::endl;
 
     // b v c
-    AstOr* level0010 = new AstOr();
     AstVar* level00100 = new AstVar((char*) "b");
     AstVar* level00101 = new AstVar((char*) "c");
-    level0010->addOperand(level00100);
-    level0010->addOperand(level00101);
+    AstOr* level0010 = new AstOr(level00100, level00101);
 
     // !(b v c)
     AstNot* level001 = new AstNot(level0010);
 
     // (a & !(b v c))
-    AstAnd* level00 = new AstAnd();
     AstVar* level000 = new AstVar((char*) "a");
-    level00->addOperand(level000);
-    level00->addOperand(level001);
+    AstAnd* level00 = new AstAnd(level000, level001);
 
     // (a & !(b v c)) v d
-    AstOr* level0 = new AstOr();
     AstVar* level01 = new AstVar((char*) "d");
-    level0->addOperand(level00);
-    level0->addOperand(level01);
+    AstOr* level0 = new AstOr(level00, level01);
 
     std::cout << *level0 << std::endl;
 
