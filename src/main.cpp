@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AstNode.h"
+#include "AstTranslator.h"
 #include "Lexer.h"
 #include "Parser.h"
 #include "SatNode.h"
@@ -27,19 +28,19 @@ int main(int argc, char** argv) {
     std::cout << "AST test [ (a & !(b v c)) v d ]:" << std::endl;
 
     // b v c
-    AstVar* level00100 = new AstVar((char*) "b");
-    AstVar* level00101 = new AstVar((char*) "c");
+    AstVar* level00100 = new AstVar("b");
+    AstVar* level00101 = new AstVar("c");
     AstOr* level0010 = new AstOr(level00100, level00101);
 
     // !(b v c)
     AstNot* level001 = new AstNot(level0010);
 
     // (a & !(b v c))
-    AstVar* level000 = new AstVar((char*) "a");
+    AstVar* level000 = new AstVar("a");
     AstAnd* level00 = new AstAnd(level000, level001);
 
     // (a & !(b v c)) v d
-    AstVar* level01 = new AstVar((char*) "d");
+    AstVar* level01 = new AstVar("d");
     AstOr* level0 = new AstOr(level00, level01);
 
     std::cout << *level0 << std::endl;
@@ -58,5 +59,15 @@ int main(int argc, char** argv) {
     std::cout << "Parsing test:" << std::endl;
     Parser* parser = new Parser(lexer->getTokens());
     std::cout << *parser->getProgram() << std::endl;
+
+    AstTranslator* translator = new AstTranslator(parser->getProgram());
+    std::cout << *translator->getSatFormula() << std::endl;
+
+    std::string test = "!((p | q) & r) | (!s)";
+    std::cout << "Test: " << test << std::endl;
+    lexer = new Lexer(test);
+    parser = new Parser(lexer->getTokens());
+    translator = new AstTranslator(parser->getProgram());
+    std::cout << *translator->getSatFormula() << std::endl;
     return 0;
 }

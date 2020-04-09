@@ -30,6 +30,14 @@ class AstAnd : public AstNode {
 public:
     AstAnd(AstNode* left, AstNode* right) : left(left), right(right) {}
 
+    AstNode* getLeft() const {
+        return left;
+    }
+
+    AstNode* getRight() const {
+        return right;
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -44,6 +52,14 @@ private:
 class AstOr : public AstNode {
 public:
     AstOr(AstNode* left, AstNode* right) : left(left), right(right) {}
+
+    AstNode* getLeft() const {
+        return left;
+    }
+
+    AstNode* getRight() const {
+        return right;
+    }
 
 protected:
     void print(std::ostream& os) const override;
@@ -60,6 +76,10 @@ class AstNot : public AstNode {
 public:
     AstNot(AstNode* operand) : operand(operand) {}
 
+    AstNode* getOperand() const {
+        return operand;
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -73,6 +93,10 @@ private:
 class AstVar : public AstNode {
 public:
     AstVar(std::string id) : id(id) {}
+
+    std::string getName() const {
+        return id;
+    }
 
 protected:
     void print(std::ostream& os) const override;
