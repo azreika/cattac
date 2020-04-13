@@ -10,11 +10,20 @@ public:
         satisfiable = solve(formula);
     }
 
+    /**
+     * Get the assignment needed for satisfiability.
+     * Assumes the formula was satisfiable.
+     * @return the assignment map
+     */
     const std::map<std::string, bool>& getAssignments() const {
-        assert(satisfiable && "invalid analysis of unsat formula");
+        assert(isSat() && "invalid analysis of unsat formula");
         return assignments;
     }
 
+    /**
+     * Check satisfiability of the input formula.
+     * @return true iff the formula is satisfiable
+     */
     bool isSat() const {
         return satisfiable;
     }
@@ -23,67 +32,17 @@ private:
     std::map<std::string, bool> assignments{};
     bool satisfiable;
 
-    SatConjunction* simplify(const SatConjunction* formula) const {
-        SatConjunction* newFormula = new SatConjunction();
-        for (const auto* disj : formula->getDisjunctions()) {
-            SatDisjunction* newDisj = new SatDisjunction();
-            bool disjSatisfied = false;
-            for (const auto* atom : disj->getAtoms()) {
-                auto pos = assignments.find(atom->getName());
-                if (pos != assignments.end()) {
-                    bool isTrue = pos->second;
-                    if (isTrue == !atom->isNegated()) {
-                        // Disjunction satisfied!
-                        disjSatisfied = true;
-                        break;
-                    } else {
-                        // Atom failed, depend on the rest...
-                    }
-                } else {
-                    // No change - keep the atom
-                    newDisj->addAtom(new SatAtom(atom->getName(), atom->isNegated()));
-                }
-            }
+    /**
+     * Simplify a given formula under the current assignment.
+     * @param formula formula to simplify
+     * @return formula in CNF after simplification
+     */
+    SatConjunction* simplify(const SatConjunction* formula) const;
 
-            if (!disjSatisfied) {
-                newFormula->addDisjunction(newDisj);
-            }
-        }
-        return newFormula;
-    }
-
-    bool solve(const SatConjunction* formula) {
-        // Check if trivially satisfiable
-        if (formula->size() == 0) {
-            return true;
-        }
-
-        // Check if trivially unsatisfiable
-        SatAtom* atom = nullptr;
-        for (const auto* disj : formula->getDisjunctions()) {
-            if (disj->size() == 0) {
-                return false;
-            }
-            if (atom == nullptr) {
-                atom = disj->getAtoms()[0];
-            }
-        }
-
-        // Not trivial - assign any variable
-        assert(atom != nullptr && "unexpected nullptr atom");
-        assignments[atom->getName()] = atom->isNegated();
-        if (solve(simplify(formula))) {
-            return true;
-        }
-
-        // Failed - backtrack and try the opposite
-        assignments[atom->getName()] = !atom->isNegated();
-        if (solve(simplify(formula))) {
-            return true;
-        }
-
-        // Unsatisfiable!
-        assignments.erase(atom->getName());
-        return false;
-    }
+    /**
+     * Solve the given formula, updating the assignment map as needed.
+     * @param formula formula to check satisfiability of
+     * @return true iff the formula is sat under the current assignment
+     */
+    bool solve(const SatConjunction* formula);
 };
