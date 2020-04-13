@@ -16,6 +16,8 @@ public:
         return os;
     }
 
+    virtual SatNode* clone() const = 0;
+
 protected:
     virtual void print(std::ostream& os) const = 0;
 };
@@ -42,6 +44,8 @@ public:
     size_t size() const {
         return disjunctions.size();
     }
+
+    SatConjunction* clone() const override;
 
 protected:
     void print(std::ostream& os) const override;
@@ -73,6 +77,8 @@ public:
         return atoms.size();
     }
 
+    SatDisjunction* clone() const override;
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -94,6 +100,8 @@ public:
     bool isNegated() const {
         return negated;
     }
+
+    SatAtom* clone() const override;
 
 protected:
     void print(std::ostream& os) const override;

@@ -19,6 +19,8 @@ public:
         return os;
     }
 
+    virtual AstNode* clone() const = 0;
+
 protected:
     virtual void print(std::ostream& os) const = 0;
 };
@@ -36,6 +38,10 @@ public:
 
     AstNode* getRight() const {
         return right;
+    }
+
+    AstAnd* clone() const override {
+        return new AstAnd(left->clone(), right->clone());
     }
 
 protected:
@@ -61,6 +67,10 @@ public:
         return right;
     }
 
+    AstOr* clone() const override {
+        return new AstOr(left->clone(), right->clone());
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -80,6 +90,10 @@ public:
         return operand;
     }
 
+    AstNot* clone() const override {
+        return new AstNot(operand->clone());
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -96,6 +110,10 @@ public:
 
     std::string getName() const {
         return id;
+    }
+
+    AstVar* clone() const override {
+        return new AstVar(id);
     }
 
 protected:

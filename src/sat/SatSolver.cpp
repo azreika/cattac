@@ -23,7 +23,7 @@ SatConjunction* SatSolver::simplify(const SatConjunction* formula) const {
                 }
             } else {
                 // Atom not yet set - keep it in
-                newDisj->addAtom(new SatAtom(atom->getName(), atom->isNegated()));
+                newDisj->addAtom(atom->clone());
             }
         }
 
