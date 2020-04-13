@@ -4,6 +4,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "SatNode.h"
+#include "SatSolver.h"
 
 int main(int argc, char** argv) {
     std::cout << "Welcome to CattaC." << std::endl;
@@ -69,5 +70,22 @@ int main(int argc, char** argv) {
     parser = new Parser(lexer->getTokens());
     translator = new AstTranslator(parser->getProgram());
     std::cout << *translator->getSatFormula() << std::endl;
+
+    std::string sattest = "(p & (q | !p)) | (!p & !q)";
+    std::cout << "Test: " << sattest << std::endl;
+    lexer = new Lexer(sattest);
+    parser = new Parser(lexer->getTokens());
+    std::cout << "program: " << *parser->getProgram() << std::endl;
+    translator = new AstTranslator(parser->getProgram());
+    std::cout << *translator->getSatFormula() << std::endl;
+    SatSolver* solver = new SatSolver(translator->getSatFormula());
+    if (solver->isSat()) {
+        std::cout << "<<SAT>>" << std::endl;
+        for (const auto& pair : solver->getAssignments()) {
+            std::cout << pair.first << ": " << pair.second << std::endl;
+        }
+    } else {
+        std::cout << "<<UNSAT>>" << std::endl;
+    }
     return 0;
 }

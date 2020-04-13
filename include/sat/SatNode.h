@@ -35,6 +35,14 @@ public:
         disjunctions.push_back(disjunction);
     }
 
+    const std::vector<SatDisjunction*>& getDisjunctions() const {
+        return disjunctions;
+    }
+
+    size_t size() const {
+        return disjunctions.size();
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -57,6 +65,14 @@ public:
         atoms.push_back(atom);
     }
 
+    const std::vector<SatAtom*>& getAtoms() const {
+        return atoms;
+    }
+
+    size_t size() const {
+        return atoms.size();
+    }
+
 protected:
     void print(std::ostream& os) const override;
 
@@ -70,6 +86,14 @@ private:
 class SatAtom : public SatNode {
 public:
     SatAtom(std::string id, bool negated) : id(id), negated(negated) {}
+
+    std::string getName() const {
+        return id;
+    }
+
+    bool isNegated() const {
+        return negated;
+    }
 
 protected:
     void print(std::ostream& os) const override;
