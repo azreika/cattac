@@ -29,19 +29,19 @@ int main(int argc, char** argv) {
     std::cout << "AST test [ (a & !(b v c)) v d ]:" << std::endl;
 
     // b v c
-    AstVar* level00100 = new AstVar("b");
-    AstVar* level00101 = new AstVar("c");
+    AstVariable* level00100 = new AstVariable("b");
+    AstVariable* level00101 = new AstVariable("c");
     AstOr* level0010 = new AstOr(level00100, level00101);
 
     // !(b v c)
     AstNot* level001 = new AstNot(level0010);
 
     // (a & !(b v c))
-    AstVar* level000 = new AstVar("a");
+    AstVariable* level000 = new AstVariable("a");
     AstAnd* level00 = new AstAnd(level000, level001);
 
     // (a & !(b v c)) v d
-    AstVar* level01 = new AstVar("d");
+    AstVariable* level01 = new AstVariable("d");
     AstOr* level0 = new AstOr(level00, level01);
 
     std::cout << *level0 << std::endl;

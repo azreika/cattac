@@ -36,7 +36,7 @@ AstNode* Parser::parseTerm() {
             return expression;
         }
         case TokenType::VARIABLE:
-            return new AstVar(curToken->getValue());
+            return new AstVariable(curToken->getValue());
         default:
             assert(false && "unexpected token");
     }

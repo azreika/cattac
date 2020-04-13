@@ -87,7 +87,7 @@ std::string AstTranslator::nameSubformulas(const AstNode* node) {
         std::string newName = nextName();
         addAssignment(AssignmentType::NOT, newName, op);
         return newName;
-    } else if (const AstVar* varOp = dynamic_cast<const AstVar*>(node)) {
+    } else if (const AstVariable* varOp = dynamic_cast<const AstVariable*>(node)) {
         return varOp->getName();
     } else {
         assert(false && "unexpected ast node type");

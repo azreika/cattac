@@ -7,7 +7,7 @@ class AstNode;
 class AstAnd;
 class AstOr;
 class AstNot;
-class AstVar;
+class AstVariable;
 
 /**
  * Represents a generic node in the AST.
@@ -104,21 +104,21 @@ private:
 /**
  * Represents a variable in a logical formula.
  */
-class AstVar : public AstNode {
+class AstVariable : public AstNode {
 public:
-    AstVar(std::string id) : id(id) {}
+    AstVariable(std::string name) : name(name) {}
 
     std::string getName() const {
-        return id;
+        return name;
     }
 
-    AstVar* clone() const override {
-        return new AstVar(id);
+    AstVariable* clone() const override {
+        return new AstVariable(name);
     }
 
 protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::string id;
+    std::string name;
 };

@@ -15,6 +15,6 @@ void AstNot::print(std::ostream& os) const {
     os << "!" << *operand;
 }
 
-void AstVar::print(std::ostream& os) const {
-    os << id;
+void AstVariable::print(std::ostream& os) const {
+    os << name;
 }
