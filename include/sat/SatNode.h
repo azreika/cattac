@@ -91,10 +91,10 @@ private:
  */
 class SatAtom : public SatNode {
 public:
-    SatAtom(std::string id, bool negated) : id(id), negated(negated) {}
+    SatAtom(std::string name, bool negated) : name(name), negated(negated) {}
 
     std::string getName() const {
-        return id;
+        return name;
     }
 
     bool isNegated() const {
@@ -107,6 +107,6 @@ protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::string id;
+    std::string name;
     bool negated;
 };

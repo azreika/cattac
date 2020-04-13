@@ -42,9 +42,9 @@ void SatAtom::print(std::ostream& os) const {
     if (negated) {
         os << "!";
     }
-    os << id;
+    os << name;
 }
 
 SatAtom* SatAtom::clone() const {
-    return new SatAtom(id, negated);
+    return new SatAtom(name, negated);
 }
