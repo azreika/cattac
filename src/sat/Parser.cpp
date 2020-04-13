@@ -29,7 +29,7 @@ AstNode* Parser::parseTerm() {
     Token* curToken = advance();
     switch (curToken->getType()) {
         case TokenType::NOT:
-            return new AstNot(parseExpression());
+            return new AstNot(parseTerm());
         case TokenType::LPAREN: {
             AstNode* expression = parseExpression();
             assert(match(TokenType::RPAREN) && "expected ')'");
