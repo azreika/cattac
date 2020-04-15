@@ -9,18 +9,7 @@
 #include "SatNode.h"
 #include "SatSolver.h"
 
-int main(int argc, char** argv) {
-    if (argc != 2) {
-        std::cout << "Usage: " << argv[0] << " <FILENAME>" << std::endl;
-        return 0;
-    }
-
-    std::ifstream inFile;
-    inFile.open(argv[1]);
-    std::stringstream strStream;
-    strStream << inFile.rdbuf();
-    std::string program = strStream.str();
-
+void runProgram(std::string program) {
     std::cout << "Program:" << std::endl;
     std::cout << "---" << std::endl;
     std::cout << program << std::endl;
@@ -72,6 +61,38 @@ int main(int argc, char** argv) {
         std::cout << "}" << std::endl;
     } else {
         std::cout << "Unsatisfiable." << std::endl;
+    }
+}
+
+void runInterpeter() {
+    std::string program;
+    std::cout << "> ";
+    while (std::getline(std::cin, program)) {
+        runProgram(program);
+        std::cout << std::endl;
+        std::cout << "> ";
+    }
+    if (std::cin.bad()) {
+        std::cerr << "I/O error" << std::endl;
+    }
+}
+
+void runFile(std::string filename) {
+    std::ifstream inFile;
+    inFile.open(filename);
+    std::stringstream strStream;
+    strStream << inFile.rdbuf();
+    std::string program = strStream.str();
+    runProgram(program);
+}
+
+int main(int argc, char** argv) {
+    if (argc == 1) {
+        runInterpeter();
+    } else if (argc == 2) {
+        runFile(argv[1]);
+    } else {
+        std::cout << "Usage: " << argv[0] << " <OPTIONAL FILENAME>" << std::endl;
     }
 
     return 0;
