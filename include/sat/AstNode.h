@@ -80,6 +80,33 @@ private:
 };
 
 /**
+ * Represents an "X -> Y" in a logical formula.
+ */
+class AstImplies : public AstNode {
+public:
+    AstImplies(AstNode* left, AstNode* right) : left(left), right(right) {}
+
+    AstNode* getLeft() const {
+        return left;
+    }
+
+    AstNode* getRight() const {
+        return right;
+    }
+
+    AstImplies* clone() const override {
+        return new AstImplies(left->clone(), right->clone());
+    }
+
+protected:
+    void print(std::ostream& os) const override;
+
+private:
+    AstNode* left;
+    AstNode* right;
+};
+
+/**
  * Represents an "!X" in a logical formula.
  */
 class AstNot : public AstNode {

@@ -11,16 +11,25 @@ void Parser::run() {
 
 AstNode* Parser::parseExpression() {
     AstNode* expression = parseConjunction();
-    if (match(TokenType::OR)) {
+    while (match(TokenType::OR)) {
         expression = new AstOr(expression, parseExpression());
     }
     return expression;
 }
 
 AstNode* Parser::parseConjunction() {
+    AstNode* impl = parseImplication();
+    while (match(TokenType::AND)) {
+        impl = new AstAnd(impl, parseConjunction());
+    }
+    return impl;
+}
+
+AstNode* Parser::parseImplication() {
     AstNode* term = parseTerm();
-    if (match(TokenType::AND)) {
-        term = new AstAnd(term, parseExpression());
+    while (match(TokenType::DASH)) {
+        assert(match(TokenType::GT) && "expected '>'");
+        term = new AstImplies(term, parseImplication());
     }
     return term;
 }

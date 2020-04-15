@@ -16,6 +16,8 @@ enum class TokenType {
     AND,
     OR,
     NOT,
+    DASH,
+    GT,
     END,
 };
 

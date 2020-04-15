@@ -28,6 +28,8 @@ void Lexer::scanNextToken() {
         case '!': addToken(TokenType::NOT); break;
         case '&': addToken(TokenType::AND); break;
         case '|': addToken(TokenType::OR); break;
+        case '-': addToken(TokenType::DASH); break;
+        case '>': addToken(TokenType::GT); break;
 
         default: {
             if (isalpha(c)) {

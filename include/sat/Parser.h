@@ -70,6 +70,12 @@ private:
     AstNode* parseConjunction();
 
     /**
+     * Parse an implication.
+     * @return the implication read
+     */
+    AstNode* parseImplication();
+
+    /**
      * Parse a term.
      * @return the term read
      */

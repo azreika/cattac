@@ -49,6 +49,24 @@ void AstTranslator::run() {
                 result->addDisjunction(third);
                 break;
             }
+            case AssignmentType::IMPLIES: {
+                SatDisjunction* first = new SatDisjunction();
+                first->addAtom(new SatAtom(assignment.op1, true));
+                first->addAtom(new SatAtom(assignment.op2, false));
+                first->addAtom(new SatAtom(assignment.name, true));
+                result->addDisjunction(first);
+
+                SatDisjunction* second = new SatDisjunction();
+                second->addAtom(new SatAtom(assignment.op1, false));
+                second->addAtom(new SatAtom(assignment.name, false));
+                result->addDisjunction(second);
+
+                SatDisjunction* third = new SatDisjunction();
+                third->addAtom(new SatAtom(assignment.op2, true));
+                third->addAtom(new SatAtom(assignment.name, false));
+                result->addDisjunction(third);
+                break;
+            }
             case AssignmentType::NOT: {
                 assert(assignment.op2 == "" && "unexpected second operand");
 
@@ -81,6 +99,12 @@ std::string AstTranslator::nameSubformulas(const AstNode* node) {
         std::string right = nameSubformulas(orOp->getRight());
         std::string newName = nextName();
         addAssignment(AssignmentType::OR, newName, left, right);
+        return newName;
+    } else if (const AstImplies* impliesOp = dynamic_cast<const AstImplies*>(node)) {
+        std::string left = nameSubformulas(impliesOp->getLeft());
+        std::string right = nameSubformulas(impliesOp->getRight());
+        std::string newName = nextName();
+        addAssignment(AssignmentType::IMPLIES, newName, left, right);
         return newName;
     } else if (const AstNot* notOp = dynamic_cast<const AstNot*>(node)) {
         std::string op = nameSubformulas(notOp->getOperand());

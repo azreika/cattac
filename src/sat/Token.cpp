@@ -31,6 +31,12 @@ void printTokenType(const TokenType& tokenType, std::ostream& os) {
         case TokenType::VARIABLE:
             os << "VAR";
             break;
+        case TokenType::DASH:
+            os << "DASH";
+            break;
+        case TokenType::GT:
+            os << "GT";
+            break;
         case TokenType::END:
             os << "END";
             break;

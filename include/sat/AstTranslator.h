@@ -27,7 +27,7 @@ private:
      * Types of internal assignments possible.
      */
     enum class AssignmentType {
-        AND, NOT, OR,
+        AND, NOT, OR, IMPLIES,
     };
 
     /**
