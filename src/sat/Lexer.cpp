@@ -40,7 +40,7 @@ void Lexer::scanNextToken() {
 }
 
 std::string Lexer::scanIdentifier() {
-    while (hasNext() && isalpha(peek())) {
+    while (hasNext() && isalnum(peek())) {
         advance();
     }
     return program.substr(currTokenStart, idx - currTokenStart);
