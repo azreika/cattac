@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <sstream>
 #include <string>
 
@@ -32,15 +34,11 @@ void SatInterface::execute() {
 }
 
 void SatInterface::executeREPL() {
-    std::string program;
-    std::cout << "> ";
-    while (std::getline(std::cin, program)) {
-        executeProgram(program);
-        std::cout << std::endl;
-        std::cout << "> ";
-    }
-    if (std::cin.bad()) {
-        std::cerr << "ERROR: IO error " << std::endl;
+    while (char* line = readline("> ")) {
+        if (!line) break;
+        add_history(line);
+        executeProgram(std::string(line));
+        free(line);
     }
 }
 
