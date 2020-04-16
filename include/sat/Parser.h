@@ -12,14 +12,14 @@ public:
         run();
     }
 
-    AstNode* getProgram() const {
-        return program;
+    const AstNode* getProgram() const {
+        return program.get();
     }
 
 private:
     const std::vector<Token*> tokens;
     size_t pos{0};
-    AstNode* program;
+    std::unique_ptr<AstNode> program;
 
     /**
      * Run the parser to produce the root program node.
@@ -61,23 +61,23 @@ private:
      * Parse an expression.
      * @return the expression read
      */
-    AstNode* parseExpression();
+    std::unique_ptr<AstNode> parseExpression();
 
     /**
      * Parse a conjunction.
      * @return the conjunction read
      */
-    AstNode* parseConjunction();
+    std::unique_ptr<AstNode> parseConjunction();
 
     /**
      * Parse an implication.
      * @return the implication read
      */
-    AstNode* parseImplication();
+    std::unique_ptr<AstNode> parseImplication();
 
     /**
      * Parse a term.
      * @return the term read
      */
-    AstNode* parseTerm();
+    std::unique_ptr<AstNode> parseTerm();
 };

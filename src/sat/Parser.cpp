@@ -1,51 +1,56 @@
 #include <cassert>
+#include <memory>
 #include <vector>
 
 #include "Parser.h"
 #include "Token.h"
+#include "Util.h"
 
 void Parser::run() {
-    program = parseExpression();
+    program = std::move(parseExpression());
     assert(match(TokenType::END) && "expected end of program");
 }
 
-AstNode* Parser::parseExpression() {
-    AstNode* expression = parseConjunction();
+std::unique_ptr<AstNode> Parser::parseExpression() {
+    auto expression = parseConjunction();
     while (match(TokenType::OR)) {
-        expression = new AstOr(expression, parseExpression());
+        expression = std::make_unique<AstOr>(std::move(expression),
+                parseExpression());
     }
-    return expression;
+    return std::move(expression);
 }
 
-AstNode* Parser::parseConjunction() {
-    AstNode* impl = parseImplication();
+std::unique_ptr<AstNode> Parser::parseConjunction() {
+    auto impl = parseImplication();
     while (match(TokenType::AND)) {
-        impl = new AstAnd(impl, parseConjunction());
+        impl = std::make_unique<AstAnd>(std::move(impl),
+                parseConjunction());
     }
-    return impl;
+    return std::move(impl);
 }
 
-AstNode* Parser::parseImplication() {
-    AstNode* term = parseTerm();
+std::unique_ptr<AstNode> Parser::parseImplication() {
+    auto term = parseTerm();
     while (match(TokenType::DASH)) {
         assert(match(TokenType::GT) && "expected '>'");
-        term = new AstImplies(term, parseImplication());
+        term = std::make_unique<AstImplies>(std::move(term),
+                parseImplication());
     }
-    return term;
+    return std::move(term);
 }
 
-AstNode* Parser::parseTerm() {
+std::unique_ptr<AstNode> Parser::parseTerm() {
     Token* curToken = advance();
     switch (curToken->getType()) {
         case TokenType::NOT:
-            return new AstNot(parseTerm());
+            return std::make_unique<AstNot>(parseTerm());
         case TokenType::LPAREN: {
-            AstNode* expression = parseExpression();
+            auto expression = parseExpression();
             assert(match(TokenType::RPAREN) && "expected ')'");
-            return expression;
+            return std::move(expression);
         }
         case TokenType::VARIABLE:
-            return new AstVariable(curToken->getValue());
+            return std::make_unique<AstVariable>(curToken->getValue());
         default:
             assert(false && "unexpected token");
     }

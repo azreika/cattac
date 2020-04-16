@@ -13,7 +13,7 @@ SAT_OBJ := $(SAT_SRC:$(SAT_SRC_DIR)/%.cpp=$(SAT_OBJ_DIR)/%.o)
 
 CC := g++
 CPPFLAGS := -I$(SAT_INC_DIR)
-CFLAGS := -Wall -Werror -std=c++11 -g
+CFLAGS := -Wall -Werror -std=c++14 -g
 LIBS := -lreadline
 
 .PHONY: all clean
