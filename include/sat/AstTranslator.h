@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include "AstNode.h"
@@ -19,7 +20,7 @@ public:
      * Return the SAT formula represented by the input AST.
      */
     SatConjunction* getSatFormula() const {
-        return result;
+        return result.get();
     }
 
 private:
@@ -44,7 +45,7 @@ private:
     std::map<std::string, AstNode*> subformulaNames{};
     size_t numVars{0};
     std::vector<Assignment> assignments{};
-    SatConjunction* result{new SatConjunction()};
+    std::unique_ptr<SatConjunction> result{std::make_unique<SatConjunction>()};
 
     /**
      * Run the translator.

@@ -6,79 +6,79 @@
 void AstTranslator::run() {
     // Construct the first disjunction - assigns "true" to the full formula
     std::string fullFormulaVariable = nameSubformulas(formula);
-    SatDisjunction* formulaTruth = new SatDisjunction();
-    formulaTruth->addAtom(new SatAtom(fullFormulaVariable, false));
-    result->addDisjunction(formulaTruth);
+    auto formulaTruth = std::make_unique<SatDisjunction>();
+    formulaTruth->addAtom(std::make_unique<SatAtom>(fullFormulaVariable, false));
+    result->addDisjunction(std::move(formulaTruth));
 
     // Construct disjunctions to model all variable assignments created
     for (const auto& assignment : assignments) {
         switch (assignment.type) {
             case AssignmentType::AND: {
-                SatDisjunction* first = new SatDisjunction();
-                first->addAtom(new SatAtom(assignment.op1, true));
-                first->addAtom(new SatAtom(assignment.op2, true));
-                first->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(first);
+                auto first = std::make_unique<SatDisjunction>();
+                first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
+                first->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
+                first->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(first));
 
-                SatDisjunction* second = new SatDisjunction();
-                second->addAtom(new SatAtom(assignment.op1, false));
-                second->addAtom(new SatAtom(assignment.name, true));
-                result->addDisjunction(second);
+                auto second = std::make_unique<SatDisjunction>();
+                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                result->addDisjunction(std::move(second));
 
-                SatDisjunction* third = new SatDisjunction();
-                third->addAtom(new SatAtom(assignment.op2, false));
-                third->addAtom(new SatAtom(assignment.name, true));
-                result->addDisjunction(third);
+                auto third = std::make_unique<SatDisjunction>();
+                third->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
+                third->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                result->addDisjunction(std::move(third));
                 break;
             }
             case AssignmentType::OR: {
-                SatDisjunction* first = new SatDisjunction();
-                first->addAtom(new SatAtom(assignment.op1, false));
-                first->addAtom(new SatAtom(assignment.op2, false));
-                first->addAtom(new SatAtom(assignment.name, true));
-                result->addDisjunction(first);
+                auto first = std::make_unique<SatDisjunction>();
+                first->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
+                first->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
+                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                result->addDisjunction(std::move(first));
 
-                SatDisjunction* second = new SatDisjunction();
-                second->addAtom(new SatAtom(assignment.op1, true));
-                second->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(second);
+                auto second = std::make_unique<SatDisjunction>();
+                second->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
+                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(second));
 
-                SatDisjunction* third = new SatDisjunction();
-                third->addAtom(new SatAtom(assignment.op2, true));
-                third->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(third);
+                auto third = std::make_unique<SatDisjunction>();
+                third->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
+                third->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(third));
                 break;
             }
             case AssignmentType::IMPLIES: {
-                SatDisjunction* first = new SatDisjunction();
-                first->addAtom(new SatAtom(assignment.op1, true));
-                first->addAtom(new SatAtom(assignment.op2, false));
-                first->addAtom(new SatAtom(assignment.name, true));
-                result->addDisjunction(first);
+                auto first = std::make_unique<SatDisjunction>();
+                first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
+                first->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
+                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                result->addDisjunction(std::move(first));
 
-                SatDisjunction* second = new SatDisjunction();
-                second->addAtom(new SatAtom(assignment.op1, false));
-                second->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(second);
+                auto second = std::make_unique<SatDisjunction>();
+                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(second));
 
-                SatDisjunction* third = new SatDisjunction();
-                third->addAtom(new SatAtom(assignment.op2, true));
-                third->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(third);
+                auto third = std::make_unique<SatDisjunction>();
+                third->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
+                third->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(third));
                 break;
             }
             case AssignmentType::NOT: {
                 assert(assignment.op2 == "" && "unexpected second operand");
 
-                SatDisjunction* first = new SatDisjunction();
-                first->addAtom(new SatAtom(assignment.op1, true));
-                first->addAtom(new SatAtom(assignment.name, true));
-                result->addDisjunction(first);
+                auto first = std::make_unique<SatDisjunction>();
+                first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
+                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                result->addDisjunction(std::move(first));
 
-                SatDisjunction* second = new SatDisjunction();
-                second->addAtom(new SatAtom(assignment.op1, false));
-                second->addAtom(new SatAtom(assignment.name, false));
-                result->addDisjunction(second);
+                auto second = std::make_unique<SatDisjunction>();
+                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                result->addDisjunction(std::move(second));
                 break;
             }
             default:

@@ -1,13 +1,14 @@
 #include <cassert>
+#include <memory>
 
 #include "SatSolver.h"
 
-SatConjunction* SatSolver::simplify(const SatConjunction* formula) const {
-    SatConjunction* newFormula = new SatConjunction();
+std::unique_ptr<SatConjunction> SatSolver::simplify(const SatConjunction* formula) const {
+    auto newFormula = std::make_unique<SatConjunction>();
 
     for (const auto* disj : formula->getDisjunctions()) {
         bool disjSatisfied = false;
-        SatDisjunction* newDisj = new SatDisjunction();
+        auto newDisj = std::make_unique<SatDisjunction>();
 
         for (const auto* atom : disj->getAtoms()) {
             auto pos = assignments.find(atom->getName());
@@ -23,13 +24,13 @@ SatConjunction* SatSolver::simplify(const SatConjunction* formula) const {
                 }
             } else {
                 // Atom not yet set - keep it in
-                newDisj->addAtom(atom->clone());
+                newDisj->addAtom(std::unique_ptr<SatAtom>(atom->clone()));
             }
         }
 
         if (!disjSatisfied) {
             // Add in the atom if it hasn't been satisfied yet
-            newFormula->addDisjunction(newDisj);
+            newFormula->addDisjunction(std::move(newDisj));
         }
     }
     return newFormula;
@@ -55,13 +56,13 @@ bool SatSolver::solve(const SatConjunction* formula) {
     // Not trivial - assign any variable
     assert(atom != nullptr && "unexpected nullptr atom");
     assignments[atom->getName()] = atom->isNegated();
-    if (solve(simplify(formula))) {
+    if (solve(simplify(formula).get())) {
         return true;
     }
 
     // Failed - backtrack and try the opposite
     assignments[atom->getName()] = !atom->isNegated();
-    if (solve(simplify(formula))) {
+    if (solve(simplify(formula).get())) {
         return true;
     }
 

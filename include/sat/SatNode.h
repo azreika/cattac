@@ -1,8 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "Util.h"
 
 class SatNode;
 class SatConjunction;
@@ -15,6 +18,8 @@ public:
         node.print(os);
         return os;
     }
+
+    virtual ~SatNode() = default;
 
     virtual SatNode* clone() const = 0;
 
@@ -33,12 +38,12 @@ public:
      * Add a disjunction to the conjunction.
      * @param disjunction disjunction to add
      */
-    void addDisjunction(SatDisjunction* disjunction) {
-        disjunctions.push_back(disjunction);
+    void addDisjunction(std::unique_ptr<SatDisjunction> disjunction) {
+        disjunctions.push_back(std::move(disjunction));
     }
 
-    const std::vector<SatDisjunction*>& getDisjunctions() const {
-        return disjunctions;
+    std::vector<SatDisjunction*> getDisjunctions() const {
+        return toPtrVector(disjunctions);
     }
 
     size_t size() const {
@@ -51,7 +56,7 @@ protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::vector<SatDisjunction*> disjunctions{};
+    std::vector<std::unique_ptr<SatDisjunction>> disjunctions{};
 };
 
 /**
@@ -65,12 +70,12 @@ public:
      * Add an atom to the disjunction.
      * @param atom atom to add
      */
-    void addAtom(SatAtom* atom) {
-        atoms.push_back(atom);
+    void addAtom(std::unique_ptr<SatAtom> atom) {
+        atoms.push_back(std::move(atom));
     }
 
-    const std::vector<SatAtom*>& getAtoms() const {
-        return atoms;
+    std::vector<SatAtom*> getAtoms() const {
+        return toPtrVector(atoms);
     }
 
     size_t size() const {
@@ -83,7 +88,7 @@ protected:
     void print(std::ostream& os) const override;
 
 private:
-    std::vector<SatAtom*> atoms{};
+    std::vector<std::unique_ptr<SatAtom>> atoms{};
 };
 
 /**

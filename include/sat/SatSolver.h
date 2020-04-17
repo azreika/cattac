@@ -37,7 +37,7 @@ private:
      * @param formula formula to simplify
      * @return formula in CNF after simplification
      */
-    SatConjunction* simplify(const SatConjunction* formula) const;
+    std::unique_ptr<SatConjunction> simplify(const SatConjunction* formula) const;
 
     /**
      * Solve the given formula, updating the assignment map as needed.

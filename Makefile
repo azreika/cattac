@@ -11,7 +11,7 @@ SAT_INC_DIR := $(INC_DIR)/sat
 SAT_SRC := $(wildcard $(SAT_SRC_DIR)/*.cpp)
 SAT_OBJ := $(SAT_SRC:$(SAT_SRC_DIR)/%.cpp=$(SAT_OBJ_DIR)/%.o)
 
-CC := g++
+CC := clang++
 CPPFLAGS := -I$(SAT_INC_DIR)
 CFLAGS := -Wall -Werror -std=c++14 -g
 LIBS := -lreadline

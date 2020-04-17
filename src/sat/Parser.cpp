@@ -7,7 +7,7 @@
 #include "Util.h"
 
 void Parser::run() {
-    program = std::move(parseExpression());
+    program = parseExpression();
     assert(match(TokenType::END) && "expected end of program");
 }
 
@@ -17,7 +17,7 @@ std::unique_ptr<AstNode> Parser::parseExpression() {
         expression = std::make_unique<AstOr>(std::move(expression),
                 parseExpression());
     }
-    return std::move(expression);
+    return expression;
 }
 
 std::unique_ptr<AstNode> Parser::parseConjunction() {
@@ -26,7 +26,7 @@ std::unique_ptr<AstNode> Parser::parseConjunction() {
         impl = std::make_unique<AstAnd>(std::move(impl),
                 parseConjunction());
     }
-    return std::move(impl);
+    return impl;
 }
 
 std::unique_ptr<AstNode> Parser::parseImplication() {
@@ -36,7 +36,7 @@ std::unique_ptr<AstNode> Parser::parseImplication() {
         term = std::make_unique<AstImplies>(std::move(term),
                 parseImplication());
     }
-    return std::move(term);
+    return term;
 }
 
 std::unique_ptr<AstNode> Parser::parseTerm() {
@@ -47,7 +47,7 @@ std::unique_ptr<AstNode> Parser::parseTerm() {
         case TokenType::LPAREN: {
             auto expression = parseExpression();
             assert(match(TokenType::RPAREN) && "expected ')'");
-            return std::move(expression);
+            return expression;
         }
         case TokenType::VARIABLE:
             return std::make_unique<AstVariable>(curToken->getValue());
