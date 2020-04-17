@@ -1,9 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "Token.h"
+#include "Util.h"
 
 class Lexer;
 
@@ -20,8 +22,8 @@ public:
      * Retrieve the token stream represented by the program.
      * @return a vector of tokens
      */
-    const std::vector<Token*>& getTokens() const {
-        return tokens;
+    std::vector<Token*> getTokens() const {
+        return toPtrVector(tokens);
     }
 
 private:
@@ -30,7 +32,7 @@ private:
     size_t line{0};
     size_t currLineStart{0};
     size_t currTokenStart{0};
-    std::vector<Token*> tokens{};
+    std::vector<std::unique_ptr<Token>> tokens{};
 
     /**
      * Produce the token stream represented by the source program.

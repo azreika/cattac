@@ -15,7 +15,7 @@
 #include "SatSolver.h"
 
 void SatInterface::setOptions(int argc, char** argv) {
-    opts = new CLIOptions(argc, argv);
+    opts = std::make_unique<CLIOptions>(argc, argv);
 }
 
 void SatInterface::execute() {
@@ -37,9 +37,11 @@ void SatInterface::executeREPL() {
     while (char* line = readline("> ")) {
         if (!line) break;
         add_history(line);
-        executeProgram(std::string(line));
+        std::string program = std::string(line);
         free(line);
+        executeProgram(program);
     }
+    rl_clear_history();
 }
 
 void SatInterface::executeFile(std::string filename) {

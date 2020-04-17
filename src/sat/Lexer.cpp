@@ -54,11 +54,11 @@ bool Lexer::hasNext() const {
 }
 
 void Lexer::addToken(TokenType type) {
-    tokens.push_back(new Token(type, currTokenStart - currLineStart, line));
+    tokens.push_back(std::make_unique<Token>(type, currTokenStart - currLineStart, line));
 }
 
 void Lexer::addToken(TokenType type, std::string value) {
-    tokens.push_back(new Token(type, value, currTokenStart - currLineStart, line));
+    tokens.push_back(std::make_unique<Token>(type, value, currTokenStart - currLineStart, line));
 }
 
 char Lexer::peek() const {

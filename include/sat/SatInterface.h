@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 class SatInterface;
@@ -14,7 +15,7 @@ public:
     void execute();
 
 private:
-    CLIOptions* opts;
+    std::unique_ptr<CLIOptions> opts;
 
     void executeREPL();
 
