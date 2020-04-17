@@ -35,7 +35,16 @@ void Lexer::scanNextToken() {
             if (isalpha(c)) {
                 addToken(TokenType::VARIABLE, scanIdentifier());
             } else {
-                assert(false && "unexpected character");
+                // Error!
+                std::stringstream error;
+                error << "Unexpected character '" << c << "'";
+                logError(line, currTokenStart, error.str());
+                addToken(TokenType::ERROR);
+
+                // Skip until the next whitespace character
+                while (hasNext() && !isspace(peek())) {
+                    advance();
+                }
             }
         }
     }
@@ -69,4 +78,15 @@ char Lexer::peek() const {
 char Lexer::advance() {
     assert(hasNext() && "unexpected idx position");
     return program[idx++];
+}
+
+void Lexer::logError(size_t line, size_t col, std::string message) {
+    std::stringstream error;
+    error << "Error: "
+          << message
+          << " (on line "
+          << line + 1
+          << ", column "
+          << col + 1 << ")" << std::endl;
+    errors.push_back(error.str());
 }

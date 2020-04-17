@@ -77,15 +77,25 @@ void printDebugInfo(std::string itemName, std::vector<T*> items) {
 void SatInterface::executeProgram(std::string program) {
     if (opts->debug) printDebugInfo("Program", &program);
 
+    // Lexer
     Lexer lexer(program);
     if (opts->debug) printDebugInfo("Translation", lexer.getTokens());
+    const auto& lexerErrors = lexer.getErrors();
+    if (!lexerErrors.empty()) {
+        // Lexer errors found - print them and quit
+        std::cout << join(lexerErrors, "\n") << std::endl;
+        return;
+    }
 
+    // Parser
     Parser parser(lexer.getTokens());
     if (opts->debug) printDebugInfo("Parsing", parser.getProgram());
 
+    // Translator
     AstTranslator translator(parser.getProgram());
     if (opts->debug) printDebugInfo("Translation", translator.getSatFormula());
 
+    // Solver
     SatSolver solver(translator.getSatFormula());
     if (solver.isSat()) {
         std::cout << "Satisfiable." << std::endl;

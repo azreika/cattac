@@ -19,6 +19,7 @@ enum class TokenType {
     DASH,
     GT,
     END,
+    ERROR,
 };
 
 /**

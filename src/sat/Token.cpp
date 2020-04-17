@@ -40,6 +40,9 @@ void printTokenType(const TokenType& tokenType, std::ostream& os) {
         case TokenType::END:
             os << "END";
             break;
+        case TokenType::ERROR:
+            os << "ERROR";
+            break;
         default:
             assert(false && "unexpected token type");
     }

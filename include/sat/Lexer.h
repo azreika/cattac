@@ -26,6 +26,14 @@ public:
         return toPtrVector(tokens);
     }
 
+    /**
+     * Retrieves the error log generated during lexing.
+     * @return a vector of errors
+     */
+    const std::vector<std::string>& getErrors() const {
+        return errors;
+    }
+
 private:
     std::string program;
     size_t idx{0};
@@ -33,6 +41,7 @@ private:
     size_t currLineStart{0};
     size_t currTokenStart{0};
     std::vector<std::unique_ptr<Token>> tokens{};
+    std::vector<std::string> errors{};
 
     /**
      * Produce the token stream represented by the source program.
@@ -81,4 +90,12 @@ private:
      * @return the current character being pointed to
      */
     char peek() const;
+
+    /**
+     * Logs an error found during lexing.
+     * @param line line the error was found
+     * @param col column the error was found
+     * @param message message to print
+     */
+    void logError(size_t line, size_t col, std::string message);
 };
