@@ -39,6 +39,14 @@ public:
         return value;
     }
 
+    size_t getLine() const {
+        return line;
+    }
+
+    size_t getCol() const {
+        return col;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Token& token) {
         token.print(os);
         return os;

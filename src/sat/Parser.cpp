@@ -8,7 +8,7 @@
 
 void Parser::run() {
     program = parseExpression();
-    assert(match(TokenType::END) && "expected end of program");
+    expect(TokenType::END);
 }
 
 std::unique_ptr<AstNode> Parser::parseExpression() {
@@ -32,7 +32,7 @@ std::unique_ptr<AstNode> Parser::parseConjunction() {
 std::unique_ptr<AstNode> Parser::parseImplication() {
     auto term = parseTerm();
     while (match(TokenType::DASH)) {
-        assert(match(TokenType::GT) && "expected '>'");
+        expect(TokenType::GT);
         term = std::make_unique<AstImplies>(std::move(term),
                 parseImplication());
     }
@@ -46,12 +46,35 @@ std::unique_ptr<AstNode> Parser::parseTerm() {
             return std::make_unique<AstNot>(parseTerm());
         case TokenType::LPAREN: {
             auto expression = parseExpression();
-            assert(match(TokenType::RPAREN) && "expected ')'");
+            expect(TokenType::RPAREN);
             return expression;
         }
         case TokenType::VARIABLE:
             return std::make_unique<AstVariable>(curToken->getValue());
-        default:
-            assert(false && "unexpected token");
+        default: {
+            std::stringstream error;
+            error << "Unexpected token ";
+            printTokenType(curToken->getType(), error);
+            logError(curToken, error.str());
+            if (curToken->getType() == TokenType::END) {
+                return std::make_unique<AstVariable>("@ERROR_VAR");
+            } else {
+                return parseTerm();
+            }
+        }
     }
+}
+
+void Parser::logError(const Token* token, std::string message) {
+    size_t line = token->getLine();
+    size_t col = token->getCol();
+
+    std::stringstream error;
+    error << "Error: "
+          << message
+          << " (on line "
+          << line + 1
+          << ", column "
+          << col + 1 << ")" << std::endl;
+    errors.push_back(error.str());
 }

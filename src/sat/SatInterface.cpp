@@ -41,6 +41,7 @@ void SatInterface::executeREPL() {
         std::string program = std::string(line);
         free(line);
         executeProgram(program);
+        std::cout << std::endl;
     }
     rl_clear_history();
 }
@@ -83,13 +84,19 @@ void SatInterface::executeProgram(std::string program) {
     const auto& lexerErrors = lexer.getErrors();
     if (!lexerErrors.empty()) {
         // Lexer errors found - print them and quit
-        std::cout << join(lexerErrors, "\n") << std::endl;
+        std::cout << join(lexerErrors, "\n");
         return;
     }
 
     // Parser
     Parser parser(lexer.getTokens());
     if (opts->debug) printDebugInfo("Parsing", parser.getProgram());
+    const auto& parserErrors = parser.getErrors();
+    if (!parserErrors.empty()) {
+        // Parser errors found - print them and quit
+        std::cout << join(parserErrors, "\n");
+        return;
+    }
 
     // Translator
     AstTranslator translator(parser.getProgram());
