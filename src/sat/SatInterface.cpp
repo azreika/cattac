@@ -13,6 +13,7 @@
 #include "SatInterface.h"
 #include "SatNode.h"
 #include "SatSolver.h"
+#include "Util.h"
 
 void SatInterface::setOptions(int argc, char** argv) {
     opts = std::make_unique<CLIOptions>(argc, argv);
@@ -66,22 +67,18 @@ void printDebugInfo(std::string itemName, T* item) {
     std::cout << std::endl;
 }
 
+template <typename T>
+void printDebugInfo(std::string itemName, std::vector<T*> items) {
+    std::string itemStr = join(items, ", ");
+    itemStr = "{" + itemStr + "}";
+    printDebugInfo(itemName, &itemStr);
+}
+
 void SatInterface::executeProgram(std::string program) {
     if (opts->debug) printDebugInfo("Program", &program);
 
     Lexer lexer(program);
-    if (opts->debug) {
-        std::cout << "Tokenisation:" << std::endl;
-        std::cout << "---" << std::endl;
-        const auto& tokens = lexer.getTokens();
-        for (size_t i = 0; i < tokens.size(); i++) {
-            if (i != 0) std::cout << " ";
-            std::cout << *tokens[i];
-        }
-        std::cout << std::endl;
-        std::cout << "---" << std::endl;
-        std::cout << std::endl;
-    }
+    if (opts->debug) printDebugInfo("Translation", lexer.getTokens());
 
     Parser parser(lexer.getTokens());
     if (opts->debug) printDebugInfo("Parsing", parser.getProgram());
@@ -92,7 +89,7 @@ void SatInterface::executeProgram(std::string program) {
     SatSolver solver(translator.getSatFormula());
     if (solver.isSat()) {
         std::cout << "Satisfiable." << std::endl;
-        std::cout << "Assignments: {";
+
         std::vector<std::string> truths;
         for (const auto& pair : solver.getAssignments()) {
             if (pair.first[0] == '@') continue;
@@ -101,11 +98,8 @@ void SatInterface::executeProgram(std::string program) {
             truth << pair.first;
             truths.push_back(truth.str());
         }
-        for (size_t i = 0; i < truths.size(); i++) {
-            if (i != 0) std::cout << ", ";
-            std::cout << truths[i];
-        }
-        std::cout << "}" << std::endl;
+
+        std::cout << "{" << join(truths, ", ") << "}" << std::endl;
     } else {
         std::cout << "Unsatisfiable." << std::endl;
     }
