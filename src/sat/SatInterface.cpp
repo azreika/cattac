@@ -103,7 +103,9 @@ void SatInterface::executeProgram(std::string program) {
     if (opts->debug) printDebugInfo("Translation", translator.getSatFormula());
 
     // Solver
-    SatSolver solver(translator.getSatFormula());
+    SatSolver solver;
+    solver.addFormula(std::unique_ptr<SatNode>(translator.getSatFormula()->clone()));
+    solver.solve();
     if (solver.isSat()) {
         std::cout << "Satisfiable." << std::endl;
 

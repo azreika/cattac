@@ -6,9 +6,19 @@
 
 class SatSolver {
 public:
-    SatSolver(const SatConjunction* formula) {
-        satisfiable = solve(formula);
-    }
+    SatSolver() = default;
+
+    /**
+     * Solve given the current internal state of the SAT solver.
+     * @return true iff it is satisfiable
+     */
+    bool solve();
+
+    /**
+     * Add a new SAT formula to the internal formula.
+     * @param newFormula formula to add
+     */
+    void addFormula(std::unique_ptr<SatNode> newFormula);
 
     /**
      * Get the assignment needed for satisfiability.
@@ -16,6 +26,7 @@ public:
      * @return the assignment map
      */
     const std::map<std::string, bool>& getAssignments() const {
+        assert(solved && "sat solver has not been run yet!");
         assert(isSat() && "invalid analysis of unsat formula");
         return assignments;
     }
@@ -25,12 +36,16 @@ public:
      * @return true iff the formula is satisfiable
      */
     bool isSat() const {
+        assert(solved && "sat solver has not been run yet!");
         return satisfiable;
     }
 
 private:
     std::map<std::string, bool> assignments{};
-    bool satisfiable;
+    bool satisfiable{false};
+    bool solved{false};
+    std::unique_ptr<SatConjunction> formula{std::make_unique<SatConjunction>()};
+
 
     /**
      * Simplify a given formula under the current assignment.
@@ -45,4 +60,13 @@ private:
      * @return true iff the formula is sat under the current assignment
      */
     bool solve(const SatConjunction* formula);
+
+    /**
+     * Invalidates the current assignment/solution cache.
+     */
+    void invalidate() {
+        assignments.clear();
+        solved = false;
+        satisfiable = false;
+    }
 };

@@ -3,6 +3,29 @@
 
 #include "SatSolver.h"
 
+bool SatSolver::solve() {
+    solved = true;
+    satisfiable = solve(formula.get());
+    return satisfiable;
+}
+
+void SatSolver::addFormula(std::unique_ptr<SatNode> newFormula) {
+    invalidate();
+    if (const auto* conjunction = dynamic_cast<SatConjunction*>(newFormula.get())) {
+        for (const auto* disj : conjunction->getDisjunctions()) {
+            formula->addDisjunction(std::unique_ptr<SatDisjunction>(disj->clone()));
+        }
+    } else if (const auto* disjunction = dynamic_cast<SatDisjunction*>(newFormula.get())) {
+        formula->addDisjunction(std::unique_ptr<SatDisjunction>(disjunction->clone()));
+    } else if (const auto* atom = dynamic_cast<SatAtom*>(newFormula.get())) {
+        auto disj = std::make_unique<SatDisjunction>();
+        disj->addAtom(std::unique_ptr<SatAtom>(atom->clone()));
+        formula->addDisjunction(std::move(disj));
+    } else {
+        assert(false && "unexpected node type");
+    }
+}
+
 std::unique_ptr<SatConjunction> SatSolver::simplify(const SatConjunction* formula) const {
     auto newFormula = std::make_unique<SatConjunction>();
 
