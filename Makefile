@@ -4,15 +4,11 @@ SRC_DIR := src
 OBJ_DIR := obj
 INC_DIR := include
 
-SAT_SRC_DIR := $(SRC_DIR)/sat
-SAT_OBJ_DIR := $(OBJ_DIR)/sat
-SAT_INC_DIR := $(INC_DIR)/sat
-
-SAT_SRC := $(wildcard $(SAT_SRC_DIR)/*.cpp)
-SAT_OBJ := $(SAT_SRC:$(SAT_SRC_DIR)/%.cpp=$(SAT_OBJ_DIR)/%.o)
+SRC := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 CC := clang++
-CPPFLAGS := -I$(SAT_INC_DIR)
+CPPFLAGS := -I$(INC_DIR)
 CFLAGS := -Wall -Werror -std=c++14 -g
 LIBS := -lreadline
 
@@ -20,18 +16,15 @@ LIBS := -lreadline
 
 all: $(TARGET)
 
-$(TARGET): $(OBJ_DIR)/main.o $(SAT_OBJ)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ ${LIBS}
+$(TARGET): $(OBJ)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LIBS)
 
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp $(SAT_SRC)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-$(SAT_OBJ_DIR)/%.o: $(SAT_SRC_DIR)/%.cpp $(SAT_INC_DIR)/%.h | $(SAT_OBJ_DIR)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
-
-$(SAT_OBJ_DIR):
+$(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	$(RM) -r $(SAT_OBJ_DIR)
+	$(RM) -r $(OBJ_DIR)
 	$(RM) $(TARGET)

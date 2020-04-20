@@ -48,7 +48,9 @@ public:
     }
 
 protected:
-    void print(std::ostream& os) const override;
+    void print(std::ostream& os) const override {
+        os << "(" << *left << " & " << *right << ")";
+    }
 
 private:
     std::unique_ptr<AstNode> left;
@@ -77,7 +79,9 @@ public:
     }
 
 protected:
-    void print(std::ostream& os) const override;
+    void print(std::ostream& os) const override {
+        os << "(" << *left << " | " << *right << ")";
+    }
 
 private:
     std::unique_ptr<AstNode> left;
@@ -106,7 +110,9 @@ public:
     }
 
 protected:
-    void print(std::ostream& os) const override;
+    void print(std::ostream& os) const override {
+        os << "((" << *left << ") -> (" << *right << "))";
+    }
 
 private:
     std::unique_ptr<AstNode> left;
@@ -130,7 +136,9 @@ public:
     }
 
 protected:
-    void print(std::ostream& os) const override;
+    void print(std::ostream& os) const override {
+        os << "!" << *operand;
+    }
 
 private:
     std::unique_ptr<AstNode> operand;
@@ -152,7 +160,9 @@ public:
     }
 
 protected:
-    void print(std::ostream& os) const override;
+    void print(std::ostream& os) const override {
+        os << name;
+    }
 
 private:
     std::string name;
