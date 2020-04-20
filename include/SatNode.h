@@ -46,9 +46,7 @@ public:
         return toPtrVector(disjunctions);
     }
 
-    size_t size() const {
-        return disjunctions.size();
-    }
+    size_t size() const { return disjunctions.size(); }
 
     SatConjunction* clone() const override;
 
@@ -74,13 +72,9 @@ public:
         atoms.push_back(std::move(atom));
     }
 
-    std::vector<SatAtom*> getAtoms() const {
-        return toPtrVector(atoms);
-    }
+    std::vector<SatAtom*> getAtoms() const { return toPtrVector(atoms); }
 
-    size_t size() const {
-        return atoms.size();
-    }
+    size_t size() const { return atoms.size(); }
 
     SatDisjunction* clone() const override;
 
@@ -98,13 +92,9 @@ class SatAtom : public SatNode {
 public:
     SatAtom(std::string name, bool negated) : name(name), negated(negated) {}
 
-    std::string getName() const {
-        return name;
-    }
+    std::string getName() const { return name; }
 
-    bool isNegated() const {
-        return negated;
-    }
+    bool isNegated() const { return negated; }
 
     SatAtom* clone() const override;
 

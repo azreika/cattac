@@ -1,0 +1,13 @@
+---
+Language: Cpp
+AccessModifierOffset: -4
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+DerivePointerAlignment: false
+IndentCaseLabels: true
+IndentWidth: 4
+PointerAlignment: Left
+TabWidth: 4
+UseTab: Never
+---

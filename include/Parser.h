@@ -9,17 +9,11 @@
 
 class Parser {
 public:
-    Parser(const std::vector<Token*> tokens) : tokens(tokens) {
-        run();
-    }
+    Parser(const std::vector<Token*> tokens) : tokens(tokens) { run(); }
 
-    const AstNode* getProgram() const {
-        return program.get();
-    }
+    const AstNode* getProgram() const { return program.get(); }
 
-    const std::vector<std::string> getErrors() const {
-        return errors;
-    }
+    const std::vector<std::string> getErrors() const { return errors; }
 
 private:
     const std::vector<Token*> tokens;
@@ -40,7 +34,7 @@ private:
         if (pos < tokens.size()) {
             return tokens[pos];
         }
-        return tokens[tokens.size()-1];
+        return tokens[tokens.size() - 1];
     }
 
     /**
@@ -83,7 +77,7 @@ private:
         if (pos < tokens.size()) {
             return tokens[pos++];
         }
-        return tokens[tokens.size()-1];
+        return tokens[tokens.size() - 1];
     }
 
     /**

@@ -26,9 +26,7 @@ private:
 
 class CLIOptions {
 public:
-    CLIOptions(int argc, char** argv) {
-        parseArguments(argc, argv);
-    }
+    CLIOptions(int argc, char** argv) { parseArguments(argc, argv); }
 
     std::string getHelpMessage() const;
 
@@ -36,7 +34,7 @@ public:
     std::string filename{""};
     bool debug{false};
     bool help{false};
-private:
 
+private:
     void parseArguments(int argc, char** argv);
 };

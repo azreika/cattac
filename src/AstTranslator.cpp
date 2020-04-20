@@ -7,7 +7,8 @@ void AstTranslator::run() {
     // Construct the first disjunction - assigns "true" to the full formula
     std::string fullFormulaVariable = nameSubformulas(formula);
     auto formulaTruth = std::make_unique<SatDisjunction>();
-    formulaTruth->addAtom(std::make_unique<SatAtom>(fullFormulaVariable, false));
+    formulaTruth->addAtom(
+        std::make_unique<SatAtom>(fullFormulaVariable, false));
     result->addDisjunction(std::move(formulaTruth));
 
     // Construct disjunctions to model all variable assignments created
@@ -17,53 +18,69 @@ void AstTranslator::run() {
                 auto first = std::make_unique<SatDisjunction>();
                 first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
                 first->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
-                first->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(first));
 
                 auto second = std::make_unique<SatDisjunction>();
-                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
-                second->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, true));
                 result->addDisjunction(std::move(second));
 
                 auto third = std::make_unique<SatDisjunction>();
-                third->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
-                third->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                third->addAtom(
+                    std::make_unique<SatAtom>(assignment.op2, false));
+                third->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, true));
                 result->addDisjunction(std::move(third));
                 break;
             }
             case AssignmentType::OR: {
                 auto first = std::make_unique<SatDisjunction>();
-                first->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
-                first->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
-                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.op1, false));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.op2, false));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, true));
                 result->addDisjunction(std::move(first));
 
                 auto second = std::make_unique<SatDisjunction>();
-                second->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
-                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.op1, true));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(second));
 
                 auto third = std::make_unique<SatDisjunction>();
                 third->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
-                third->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                third->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(third));
                 break;
             }
             case AssignmentType::IMPLIES: {
                 auto first = std::make_unique<SatDisjunction>();
                 first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
-                first->addAtom(std::make_unique<SatAtom>(assignment.op2, false));
-                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.op2, false));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, true));
                 result->addDisjunction(std::move(first));
 
                 auto second = std::make_unique<SatDisjunction>();
-                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
-                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(second));
 
                 auto third = std::make_unique<SatDisjunction>();
                 third->addAtom(std::make_unique<SatAtom>(assignment.op2, true));
-                third->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                third->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(third));
                 break;
             }
@@ -72,17 +89,19 @@ void AstTranslator::run() {
 
                 auto first = std::make_unique<SatDisjunction>();
                 first->addAtom(std::make_unique<SatAtom>(assignment.op1, true));
-                first->addAtom(std::make_unique<SatAtom>(assignment.name, true));
+                first->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, true));
                 result->addDisjunction(std::move(first));
 
                 auto second = std::make_unique<SatDisjunction>();
-                second->addAtom(std::make_unique<SatAtom>(assignment.op1, false));
-                second->addAtom(std::make_unique<SatAtom>(assignment.name, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.op1, false));
+                second->addAtom(
+                    std::make_unique<SatAtom>(assignment.name, false));
                 result->addDisjunction(std::move(second));
                 break;
             }
-            default:
-                assert(false && "unexpected assignment type");
+            default: assert(false && "unexpected assignment type");
         }
     }
 }
@@ -100,7 +119,8 @@ std::string AstTranslator::nameSubformulas(const AstNode* node) {
         std::string newName = nextName();
         addAssignment(AssignmentType::OR, newName, left, right);
         return newName;
-    } else if (const AstImplies* impliesOp = dynamic_cast<const AstImplies*>(node)) {
+    } else if (const AstImplies* impliesOp =
+                   dynamic_cast<const AstImplies*>(node)) {
         std::string left = nameSubformulas(impliesOp->getLeft());
         std::string right = nameSubformulas(impliesOp->getRight());
         std::string newName = nextName();
@@ -111,7 +131,8 @@ std::string AstTranslator::nameSubformulas(const AstNode* node) {
         std::string newName = nextName();
         addAssignment(AssignmentType::NOT, newName, op);
         return newName;
-    } else if (const AstVariable* varOp = dynamic_cast<const AstVariable*>(node)) {
+    } else if (const AstVariable* varOp =
+                   dynamic_cast<const AstVariable*>(node)) {
         return varOp->getName();
     } else {
         assert(false && "unexpected ast node type");

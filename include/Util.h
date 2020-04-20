@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 
-template<typename T>
+template <typename T>
 std::vector<T*> toPtrVector(const std::vector<std::unique_ptr<T>>& vec) {
     std::vector<T*> result;
     for (auto& e : vec) {
@@ -13,7 +13,7 @@ std::vector<T*> toPtrVector(const std::vector<std::unique_ptr<T>>& vec) {
     return result;
 }
 
-template<typename T>
+template <typename T>
 std::string join(const std::vector<T>& vec, std::string infix) {
     std::stringstream result;
     for (size_t i = 0; i < vec.size(); i++) {
@@ -23,7 +23,7 @@ std::string join(const std::vector<T>& vec, std::string infix) {
     return result.str();
 }
 
-template<typename T>
+template <typename T>
 std::string join(const std::vector<T*>& vec, std::string infix) {
     std::stringstream result;
     for (size_t i = 0; i < vec.size(); i++) {

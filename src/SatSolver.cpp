@@ -11,12 +11,16 @@ bool SatSolver::solve() {
 
 void SatSolver::addFormula(std::unique_ptr<SatNode> newFormula) {
     invalidate();
-    if (const auto* conjunction = dynamic_cast<SatConjunction*>(newFormula.get())) {
+    if (const auto* conjunction =
+            dynamic_cast<SatConjunction*>(newFormula.get())) {
         for (const auto* disj : conjunction->getDisjunctions()) {
-            formula->addDisjunction(std::unique_ptr<SatDisjunction>(disj->clone()));
+            formula->addDisjunction(
+                std::unique_ptr<SatDisjunction>(disj->clone()));
         }
-    } else if (const auto* disjunction = dynamic_cast<SatDisjunction*>(newFormula.get())) {
-        formula->addDisjunction(std::unique_ptr<SatDisjunction>(disjunction->clone()));
+    } else if (const auto* disjunction =
+                   dynamic_cast<SatDisjunction*>(newFormula.get())) {
+        formula->addDisjunction(
+            std::unique_ptr<SatDisjunction>(disjunction->clone()));
     } else if (const auto* atom = dynamic_cast<SatAtom*>(newFormula.get())) {
         auto disj = std::make_unique<SatDisjunction>();
         disj->addAtom(std::unique_ptr<SatAtom>(atom->clone()));
@@ -26,7 +30,8 @@ void SatSolver::addFormula(std::unique_ptr<SatNode> newFormula) {
     }
 }
 
-std::unique_ptr<SatConjunction> SatSolver::simplify(const SatConjunction* formula) const {
+std::unique_ptr<SatConjunction>
+SatSolver::simplify(const SatConjunction* formula) const {
     auto newFormula = std::make_unique<SatConjunction>();
 
     for (const auto* disj : formula->getDisjunctions()) {

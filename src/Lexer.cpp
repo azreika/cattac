@@ -63,11 +63,13 @@ bool Lexer::hasNext() const {
 }
 
 void Lexer::addToken(TokenType type) {
-    tokens.push_back(std::make_unique<Token>(type, currTokenStart - currLineStart, line));
+    tokens.push_back(
+        std::make_unique<Token>(type, currTokenStart - currLineStart, line));
 }
 
 void Lexer::addToken(TokenType type, std::string value) {
-    tokens.push_back(std::make_unique<Token>(type, value, currTokenStart - currLineStart, line));
+    tokens.push_back(std::make_unique<Token>(
+        type, value, currTokenStart - currLineStart, line));
 }
 
 char Lexer::peek() const {
@@ -82,11 +84,7 @@ char Lexer::advance() {
 
 void Lexer::logError(size_t line, size_t col, std::string message) {
     std::stringstream error;
-    error << "Error: "
-          << message
-          << " (on line "
-          << line + 1
-          << ", column "
+    error << "Error: " << message << " (on line " << line + 1 << ", column "
           << col + 1 << ")" << std::endl;
     errors.push_back(error.str());
 }

@@ -46,13 +46,13 @@ private:
     bool solved{false};
     std::unique_ptr<SatConjunction> formula{std::make_unique<SatConjunction>()};
 
-
     /**
      * Simplify a given formula under the current assignment.
      * @param formula formula to simplify
      * @return formula in CNF after simplification
      */
-    std::unique_ptr<SatConjunction> simplify(const SatConjunction* formula) const;
+    std::unique_ptr<SatConjunction>
+    simplify(const SatConjunction* formula) const;
 
     /**
      * Solve the given formula, updating the assignment map as needed.

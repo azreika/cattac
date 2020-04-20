@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
-#include <regex>
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
+#include <regex>
 #include <sstream>
 #include <string>
 
@@ -50,7 +50,8 @@ void SatInterface::executeFile(std::string filename) {
     std::ifstream inFile;
     inFile.open(filename);
     if (!inFile) {
-        std::cerr << "ERROR: File " << filename << " does not exist" << std::endl;
+        std::cerr << "ERROR: File " << filename << " does not exist"
+                  << std::endl;
         return;
     }
     std::stringstream strStream;
@@ -59,8 +60,7 @@ void SatInterface::executeFile(std::string filename) {
     executeProgram(program);
 }
 
-template <typename T>
-void printDebugInfo(std::string itemName, T* item) {
+template <typename T> void printDebugInfo(std::string itemName, T* item) {
     std::cout << itemName << ":" << std::endl;
     std::cout << "---" << std::endl;
     std::cout << *item << std::endl;
@@ -104,7 +104,8 @@ void SatInterface::executeProgram(std::string program) {
 
     // Solver
     SatSolver solver;
-    solver.addFormula(std::unique_ptr<SatNode>(translator.getSatFormula()->clone()));
+    solver.addFormula(
+        std::unique_ptr<SatNode>(translator.getSatFormula()->clone()));
     solver.solve();
     if (solver.isSat()) {
         std::cout << "Satisfiable." << std::endl;
@@ -126,14 +127,15 @@ void SatInterface::executeProgram(std::string program) {
 
 std::string CLIOptions::getHelpMessage() const {
     std::stringstream helpMessage;
-    helpMessage << "Usage: " << execName << " [--debug] [--help] [FILE]" << std::endl;
+    helpMessage << "Usage: " << execName << " [--debug] [--help] [FILE]"
+                << std::endl;
     return helpMessage.str();
 }
 
 void CLIOptions::parseArguments(int argc, char** argv) {
     assert(argc >= 1 && "expected at least one argument");
 
-    // Set executale name
+    // Set executable name
     execName = argv[0];
 
     // Parse the rest of the options
@@ -154,7 +156,7 @@ void CLIOptions::parseArguments(int argc, char** argv) {
             // Long-name options
             //      --debug
             //      --help
-            std::string rest = option.substr(2, option.length()-2);
+            std::string rest = option.substr(2, option.length() - 2);
             rest == "debug" ? debug = true : help = true;
         } else {
             // Short-name options

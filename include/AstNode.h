@@ -34,17 +34,13 @@ public:
     AstAnd(std::unique_ptr<AstNode> left, std::unique_ptr<AstNode> right)
         : left(std::move(left)), right(std::move(right)) {}
 
-    AstNode* getLeft() const {
-        return left.get();
-    }
+    AstNode* getLeft() const { return left.get(); }
 
-    AstNode* getRight() const {
-        return right.get();
-    }
+    AstNode* getRight() const { return right.get(); }
 
     AstAnd* clone() const override {
         return new AstAnd(std::unique_ptr<AstNode>(left->clone()),
-                std::unique_ptr<AstNode>(right->clone()));
+                          std::unique_ptr<AstNode>(right->clone()));
     }
 
 protected:
@@ -65,17 +61,13 @@ public:
     AstOr(std::unique_ptr<AstNode> left, std::unique_ptr<AstNode> right)
         : left(std::move(left)), right(std::move(right)) {}
 
-    AstNode* getLeft() const {
-        return left.get();
-    }
+    AstNode* getLeft() const { return left.get(); }
 
-    AstNode* getRight() const {
-        return right.get();
-    }
+    AstNode* getRight() const { return right.get(); }
 
     AstOr* clone() const override {
         return new AstOr(std::unique_ptr<AstNode>(left->clone()),
-                std::unique_ptr<AstNode>(right->clone()));
+                         std::unique_ptr<AstNode>(right->clone()));
     }
 
 protected:
@@ -96,17 +88,13 @@ public:
     AstImplies(std::unique_ptr<AstNode> left, std::unique_ptr<AstNode> right)
         : left(std::move(left)), right(std::move(right)) {}
 
-    AstNode* getLeft() const {
-        return left.get();
-    }
+    AstNode* getLeft() const { return left.get(); }
 
-    AstNode* getRight() const {
-        return right.get();
-    }
+    AstNode* getRight() const { return right.get(); }
 
     AstImplies* clone() const override {
         return new AstImplies(std::unique_ptr<AstNode>(left->clone()),
-                std::unique_ptr<AstNode>(right->clone()));
+                              std::unique_ptr<AstNode>(right->clone()));
     }
 
 protected:
@@ -124,21 +112,16 @@ private:
  */
 class AstNot : public AstNode {
 public:
-    AstNot(std::unique_ptr<AstNode>operand)
-        : operand(std::move(operand)) {}
+    AstNot(std::unique_ptr<AstNode> operand) : operand(std::move(operand)) {}
 
-    AstNode* getOperand() const {
-        return operand.get();
-    }
+    AstNode* getOperand() const { return operand.get(); }
 
     AstNot* clone() const override {
         return new AstNot(std::unique_ptr<AstNode>(operand->clone()));
     }
 
 protected:
-    void print(std::ostream& os) const override {
-        os << "!" << *operand;
-    }
+    void print(std::ostream& os) const override { os << "!" << *operand; }
 
 private:
     std::unique_ptr<AstNode> operand;
@@ -151,18 +134,12 @@ class AstVariable : public AstNode {
 public:
     AstVariable(std::string name) : name(name) {}
 
-    std::string getName() const {
-        return name;
-    }
+    std::string getName() const { return name; }
 
-    AstVariable* clone() const override {
-        return new AstVariable(name);
-    }
+    AstVariable* clone() const override { return new AstVariable(name); }
 
 protected:
-    void print(std::ostream& os) const override {
-        os << name;
-    }
+    void print(std::ostream& os) const override { os << name; }
 
 private:
     std::string name;

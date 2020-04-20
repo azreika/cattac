@@ -14,8 +14,7 @@ void SatConjunction::print(std::ostream& os) const {
 SatConjunction* SatConjunction::clone() const {
     SatConjunction* result = new SatConjunction();
     for (const auto& disj : disjunctions) {
-        result->addDisjunction(
-                std::unique_ptr<SatDisjunction>(disj->clone()));
+        result->addDisjunction(std::unique_ptr<SatDisjunction>(disj->clone()));
     }
     return result;
 }
@@ -46,6 +45,4 @@ void SatAtom::print(std::ostream& os) const {
     os << name;
 }
 
-SatAtom* SatAtom::clone() const {
-    return new SatAtom(name, negated);
-}
+SatAtom* SatAtom::clone() const { return new SatAtom(name, negated); }

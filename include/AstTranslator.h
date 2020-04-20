@@ -8,27 +8,27 @@
 #include "SatNode.h"
 
 /**
- * Translation unit that converts an AST formula into a more restricted SAT formula.
+ * Translation unit that converts an AST formula into a more restricted SAT
+ * formula.
  */
 class AstTranslator {
 public:
-    AstTranslator(const AstNode* formula) : formula(formula) {
-        run();
-    }
+    AstTranslator(const AstNode* formula) : formula(formula) { run(); }
 
     /**
      * Return the SAT formula represented by the input AST.
      */
-    SatConjunction* getSatFormula() const {
-        return result.get();
-    }
+    SatConjunction* getSatFormula() const { return result.get(); }
 
 private:
     /**
      * Types of internal assignments possible.
      */
     enum class AssignmentType {
-        AND, NOT, OR, IMPLIES,
+        AND,
+        NOT,
+        OR,
+        IMPLIES,
     };
 
     /**
@@ -59,7 +59,8 @@ private:
      * @param left operand of the assignment
      * @param right operand of the assignment (optional)
      */
-    void addAssignment(AssignmentType type, std::string name, std::string operand1, std::string operand2 = "") {
+    void addAssignment(AssignmentType type, std::string name,
+                       std::string operand1, std::string operand2 = "") {
         assignments.push_back({type, name, operand1, operand2});
     }
 

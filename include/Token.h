@@ -27,25 +27,19 @@ enum class TokenType {
  */
 class Token {
 public:
-    Token(TokenType type, std::string value, size_t col, size_t line) : type(type), value(value), col(col), line(line) {}
+    Token(TokenType type, std::string value, size_t col, size_t line)
+        : type(type), value(value), col(col), line(line) {}
 
-    Token(TokenType type, size_t col, size_t line) : type(type), value(""), col(col), line(line) {}
+    Token(TokenType type, size_t col, size_t line)
+        : type(type), value(""), col(col), line(line) {}
 
-    TokenType getType() const {
-        return type;
-    }
+    TokenType getType() const { return type; }
 
-    std::string getValue() const {
-        return value;
-    }
+    std::string getValue() const { return value; }
 
-    size_t getLine() const {
-        return line;
-    }
+    size_t getLine() const { return line; }
 
-    size_t getCol() const {
-        return col;
-    }
+    size_t getCol() const { return col; }
 
     friend std::ostream& operator<<(std::ostream& os, const Token& token) {
         token.print(os);

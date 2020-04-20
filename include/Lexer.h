@@ -14,25 +14,19 @@ class Lexer;
  */
 class Lexer {
 public:
-    Lexer(std::string program) : program(program) {
-        run();
-    }
+    Lexer(std::string program) : program(program) { run(); }
 
     /**
      * Retrieve the token stream represented by the program.
      * @return a vector of tokens
      */
-    std::vector<Token*> getTokens() const {
-        return toPtrVector(tokens);
-    }
+    std::vector<Token*> getTokens() const { return toPtrVector(tokens); }
 
     /**
      * Retrieves the error log generated during lexing.
      * @return a vector of errors
      */
-    const std::vector<std::string>& getErrors() const {
-        return errors;
-    }
+    const std::vector<std::string>& getErrors() const { return errors; }
 
 private:
     std::string program;
